@@ -1,0 +1,132 @@
+. Assignment 1 - Transformations and Introduction to OpenGL
+. ---------------------------------------------------------
+.Due. Friday Jan. 24, 2020
+.
+. L-systems are used procedurally to create natural appearing objects. Write a program which interprets an L-system and draws a plant like object. The L-system interprets a string and create an image based upon recursively parsing the string. 
+. 
+. Sample Code
+. -----------
+. The sample code for the assignment creates the scene using different lighting and drawing parameters. These can be switched to by typing the keys 1, 2, 3, and 4.  Do not break this functionality in the program. You can exit the program using the q key. The sample code is on Courselink. Note that there are two lines in the makefile which work on different versions of MacOS. The longer INCLUDE line is needed for Macs with a newer version of OSX like those in the THRN lab. Older versions of OSC will need the first INCLUDES line to be uncommented and the second INCLUDES line to be commented out.
+. 
+. If you wish to compile the code on a Linux or Windows operating system you will need to change the include files for OpenGL in the sample code. And example of what the includes should look like is in the sample code. 
+. 
+. 
+. Part I - Reading the Input File
+. --------------------------------
+. Read the input file containing the string into your program. Use a command line argument to read the input file name.  The program is run by typing the executable name and an input file name.
+. 	e.g.
+. 	a1 infile1.txt
+. 
+. 
+. Part II - Recursive Drawing
+. ---------------------------
+. There are several different types of L-systems. For this assignment we will use a bracketed L-system.
+. 
+. Each system is stored in a string S. The following characters can appear in the string:
+. 	F	-move up (positive Y direction) and draw a sphere, then
+. 		 recursively follow F with the entire string S 
+. 	[	-push the current state on the stack
+. 	]	-pop the last state off the stack
+. 	+	-rotate to the right (positive around Z axis)
+. 	-	-rotate to the left (negative around Z axis)
+. 
+. The F indicates three things. The first is to grow the tree by drawing an object and moving up in the Y axis. This means translating to a higher Y value. Secondly, F represents a recursive replacement of the F with the entire string S.
+. 
+. The recursive replacement of F has a maximum depth. 
+. 
+. The push [ and pop ] characters indicate a branch on the tree. The current location on the tree is stored by being pushed onto a stack. The branch of the tree is then drawn. Once the branch is completed the location where the branch started is popped off the stack and drawing continues.
+. 
+. The + and - indicate a bend in a tree branch. They indicate a rotation which causes the next spheres to be drawn to appear at an angle. The + indicates a positive rotation and the - indicates a negative rotation. For a given L-system, all branches will have the same angle. 
+. 
+. The interpretation of the string and drawing the tree can be done in less than 30 lines of code if it is written recursively. You need to write the interpreter but you can choose to write it recursively or non-recursively.
+. 
+. 
+. Sample L-Systems
+. ----------------
+. Three sample L-system strings are:
+. 	L-system 1:  F[+F]F[-F]F
+. 	L-system 2:  F[+F]F[-F][F] 
+. 	L-system 3:  FF-[-F+F+F]+[+F-F-F]
+. 
+. The maximum depth of recursion for each sample is:
+. 	L-system 1: 5 
+. 	L-system 2: 5
+. 	L-system 3: 4
+. 
+. The branching angle for each sample is:
+. 	L-system 1: 25.7
+. 	L-system 2: 20.0
+. 	L-system 3: 22.5
+. 
+. The input file format has one parameter on each line of the file. There will only be three lines per file and there will be nothing else in the file.  The format is:
+. 
+. depth
+. angle
+. l-system
+. 
+. 
+. so for system 1 above the input file would be:
+. 5
+. 25.7
+. F[+F]F[-F]F
+. 
+. Images from interpreting these systems are included on the Courselink page.
+. 
+. Example
+. -------
+. The output from interpreting the system F[+F] with a depth of 2 is:
+. 	FF[+F][+FF[+F]]
+. Each instance of F is replaced by itself and the entire string. The F then becomes F concatenated with the starting string F[+F], so it is FF[+F]. The recursive replacement of F could continue in the new string but the depth of recursion is two so there is no further replacement.  
+. 
+. Pick reasonable sizes for the spheres and spacing between them so the shape of the tree is visible to the viewer.
+. 
+. 
+. Part III - Viewpoint Control
+. ----------------------------
+. Use glut to control the mouse to the viewpoint. When the mouse is moved up and down the viewpoint should move closer and farther away from the object your program draws. This is useful because not all of the L-systems create objects that are the same height. It is useful to be able to zoom in to see some of the smaller objects.
+. 
+. Development Notes:
+. ------------------
+. Use this command to draw the shapes:
+.    glutSolidSphere()
+. 
+. You can use these commands to perform the transformations:
+.    glTranslatef()
+.    glRotatef()
+.    glScalef()
+. 
+. You will need to use glPushMatrix() and glPopMatrix() with the [ and ] string elements respectively (before the recursive call).
+. 
+. You can use glLoadIdentity() if you wish but it isn't needed and will likely not be very useful for this assignment after initializing the world..
+. 
+. 
+. Handin Notes
+. ------------
+. Before you submit your code, do the following:
+. 	-check that your executable will be named a1
+. 	-include a readme.txt with you student number but not your name
+. 	-make sure the makefile is configured with the proper frameworks
+. 	-make sure you have not deleted either of the INCLUDES from the
+. 	 sample makefile
+. 	-check that your .c, .h, makefile, and readme.txt are included
+. 	-ensure that you have not submitted the executable 
+. 
+. 
+. Submit the assignment using the dropbox for assignment 1 in Courselink.
+. 
+. Include a readme.txt which contains your student number, and a short description
+. of any parts of the program which do not function correctly. For instance, if
+. your program doesn't always draw the image correctly then explain when it
+. doesn't work. Don't include your name in the readme.txt file.
+. 
+. 
+. Your code must run on the Macs in Thornborough 2420.
+. 
+. Submit your source files necessary to compile your code, a makefile that
+. will compile the code, and any other file necessary to build the project.
+. The assignment will be compiled following these steps by:
+.         -unpacking your submission (tar or zip)
+.         -typing make
+. 	-running a1 <filename> from the command line
+. Any executables in the directory will be removed before make is run.
+ 
