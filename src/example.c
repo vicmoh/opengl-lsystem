@@ -180,12 +180,12 @@ void keyboard(unsigned char key, int x, int y) {
   }
 }
 
-void loadTexture(char* filePath) {
+void loadTexture() {
   FILE* fp;
   int i, j;
   int red, green, blue;
 
-  if ((fp = fopen(filePath, "r")) == 0) {
+  if ((fp = fopen("image.txt", "r")) == 0) {
     printf("Error, failed to find the file named image.txt.\n");
     exit(0);
   }
@@ -217,20 +217,15 @@ void loadTexture(char* filePath) {
 }
 
 void run(int argc, char** argv) {
-  // Init and create window
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowSize(1024, 768);
   glutCreateWindow(argv[0]);
-
-  // Draw
   init();
-  loadTexture("./assets/image.txt");  // Load the texture
+  loadTexture();
   glutReshapeFunc(reshape);
-
-  /// Main needed to start
-  glutDisplayFunc(display);    // Display the window?
-  glutKeyboardFunc(keyboard);  // The keyboard key funtions
+  glutDisplayFunc(display);
+  glutKeyboardFunc(keyboard);
   glutMainLoop();
 }
 
@@ -240,7 +235,7 @@ void run(int argc, char** argv) {
  */
 int main(int argc, char** argv) {
   printf("Running...");
-  run(argc, argv);
+  run();
   printf("Exiting...");
   return 0;
 }
