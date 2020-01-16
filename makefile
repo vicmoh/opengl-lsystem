@@ -8,13 +8,15 @@ INCLUDES = -F/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platfor
 TARGET = -mmacosx-version-min=10.8
 BIN = ./bin/
 SRC = ./src/
+CC = gcc
+FLAGS = -Iinclude
 m = [AUTO]
 
 all: compile
 	./bin/run
 
 compile:
-	gcc $(SRC)main.c -o $(BIN)run $(INCLUDES) $(TARGET)
+	$(CC) $(FLAGS) $(SRC)*.c -o $(BIN)run $(INCLUDES) $(TARGET)
 
 git:
 	git add -A
