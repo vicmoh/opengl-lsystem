@@ -1,6 +1,8 @@
 #include "file_reader.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
 
 FileReader* fr_readFile(char* fileName) {
   FileReader* fr = malloc(sizeof(FileReader));
@@ -28,7 +30,7 @@ FileReader* fr_readFile(char* fileName) {
   // remove the \r\n by tokenizing and adding to array
   char* token = strtok(stringBuffer, "\r\n");
   while (token != NULL) {
-    fr->line[lineSize] = setString(token);
+    fr->line[lineSize] = calloc(strlen(token), sizeof(char));
     strcpy(fr->line[lineSize], token);
     lineSize++;
     fr->line = realloc(fr->line, sizeof(fr->line) * (lineSize + 1));

@@ -6,8 +6,10 @@ typedef struct {
   char** line;
 } FileReader;
 
-fr_readFile(char* fileName);
+FileReader* fr_readFile(char* fileName);
 
-fr_close(FileReader* fr);
+void fr_print(FileReader* fr);
+
+void fr_close(FileReader* fr);
 
 #endif

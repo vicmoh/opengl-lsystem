@@ -6,7 +6,6 @@
 int main(int argc, char** argv) {
   printf("Running...\n");
   glSetup_run(argc, argv, NULL);
-  
   printf("Exiting...\n");
   return 0;
 }
