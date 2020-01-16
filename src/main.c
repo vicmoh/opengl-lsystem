@@ -4,8 +4,8 @@
  * Main function to run the progam.
  **/
 int main(int argc, char** argv) {
-  printf("Running...");
-  glSetup_run(argc, argv);
-  printf("Exiting...");
+  printf("Running...\n");
+  glSetup_run(argc, argv, NULL);
+  printf("Exiting...\n");
   return 0;
 }

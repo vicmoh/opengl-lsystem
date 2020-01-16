@@ -17,6 +17,6 @@ void glSetup_keyboard(unsigned char key, int x, int y);
 
 void glSetup_loadTexture(char* filePath);
 
-void glSetup_run(int argc, char** argv);
+void glSetup_run(int argc, char** argv, void (*draw)(void));
 
 #endif

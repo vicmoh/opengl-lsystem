@@ -131,40 +131,40 @@ void glSetup_keyboard(unsigned char key, int x, int y) {
       lighting = 0;
       smoothShading = 0;
       textures = 0;
-      init();
-      display();
+      glSetup_init();
+      glSetup_display();
       break;
     case '2':  // draw polygons as filled
       lineDrawing = 0;
       lighting = 0;
       smoothShading = 0;
       textures = 0;
-      init();
-      display();
+      glSetup_init();
+      glSetup_display();
       break;
     case '3':  // diffuse and specular lighting, flat shading
       lineDrawing = 0;
       lighting = 1;
       smoothShading = 0;
       textures = 0;
-      init();
-      display();
+      glSetup_init();
+      glSetup_display();
       break;
     case '4':  // diffuse and specular lighting, smooth shading
       lineDrawing = 0;
       lighting = 1;
       smoothShading = 1;
       textures = 0;
-      init();
-      display();
+      glSetup_init();
+      glSetup_display();
       break;
     case '5':  // texture with  smooth shading
       lineDrawing = 0;
       lighting = 1;
       smoothShading = 1;
       textures = 1;
-      init();
-      display();
+      glSetup_init();
+      glSetup_display();
       break;
   }
 }
@@ -213,11 +213,11 @@ void glSetup_run(int argc, char** argv, void (*draw)(void)) {
   printf("Running OpenGL Version: %s\n", glGetString(GL_VERSION));
 
   glSetup_init();
-  loadTexture("src/assets.txt");
+  glSetup_loadTexture("src/assets.txt");
   if (draw != NULL) draw();
 
-  glutReshapeFunc(reshape);
-  glutDisplayFunc(display);
-  glutKeyboardFunc(keyboard);
+  glutReshapeFunc(glSetup_reshape);
+  glutDisplayFunc(glSetup_display);
+  glutKeyboardFunc(glSetup_keyboard);
   glutMainLoop();
 }
