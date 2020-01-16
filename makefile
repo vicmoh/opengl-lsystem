@@ -13,8 +13,8 @@ m = [AUTO]
 all: compile
 	./bin/run
 
-compile: main.c
-	clang $(SRC)main.c -o $(BIN)run $(INCLUDES) $(TARGET)
+compile:
+	gcc $(SRC)main.c -o $(BIN)run $(INCLUDES) $(TARGET)
 
 git:
 	git add -A
