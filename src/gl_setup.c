@@ -211,12 +211,12 @@ void glSetup_run(int argc, char** argv, void (*draw)(void)) {
   glutInitWindowSize(1024, 768);
   glutCreateWindow(argv[0]);
   printf("Running OpenGL Version: %s\n", glGetString(GL_VERSION));
-
   glSetup_init();
-  glSetup_loadTexture("src/assets.txt");
+
+  glSetup_loadTexture("./assets/image.txt");
   if (draw != NULL) draw();
 
-  glutReshapeFunc(glSetup_reshape);
+  // glutReshapeFunc(glSetup_reshape);
   glutDisplayFunc(glSetup_display);
   glutKeyboardFunc(glSetup_keyboard);
   glutMainLoop();
