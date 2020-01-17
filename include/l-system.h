@@ -1,9 +1,13 @@
 #ifndef _L_SYSTEM_
 #define _L_SYSTEM_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 typedef struct {
   int depth;
-	double angle;
+  double angle;
   char* final;
   char* original;
 } LSystem;

@@ -1,7 +1,4 @@
 #include "l-system.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 LSystem* new_LSystem(char* start, int depth, double angle) {
   if (start == NULL) return NULL;
