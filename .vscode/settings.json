@@ -4,6 +4,10 @@
         "lsys"
     ],
     "files.associations": {
-        "file_reader.h": "c"
+        "file_reader.h": "c",
+        "*.tcc": "c",
+        "istream": "c",
+        "ostream": "c",
+        "typeinfo": "c"
     }
 }
