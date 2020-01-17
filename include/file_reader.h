@@ -6,7 +6,7 @@ typedef struct {
   char** line;
 } FileReader;
 
-FileReader* fr_readFile(char* fileName);
+FileReader* new_FileReader(char* fileName);
 
 void fr_print(FileReader* fr);
 
