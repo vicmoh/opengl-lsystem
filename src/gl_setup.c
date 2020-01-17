@@ -111,7 +111,7 @@ void GlSetup_displayExample(void) {
   glFlush();
 }
 
-void GlSetup_reshapeExample(int w, int h) {
+void GlSetup_reshape(int w, int h) {
   glViewport(0, 0, (GLsizei)w, (GLsizei)h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -216,7 +216,7 @@ void GlSetup_run(int argc, char** argv, void (*draw)(void)) {
   GlSetup_loadTexture("./assets/image.txt");
   if (draw != NULL) draw();
 
-  glutReshapeFunc(GlSetup_reshapeExample);
+  glutReshapeFunc(GlSetup_reshape);
   glutDisplayFunc(GlSetup_displayExample);
   glutKeyboardFunc(GlSetup_keyboard);
   glutMainLoop();
