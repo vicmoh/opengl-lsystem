@@ -14,6 +14,8 @@ typedef struct {
 
 LSystem* new_LSystem(char* start, int depth, double angle);
 
+void LSystem_runTest();
+
 LSystem* LSystem_run(LSystem* this);
 
 void LSystem_print(LSystem* this);

@@ -40,16 +40,17 @@ FileReader* new_FileReader(char* fileName) {
 }
 
 void FileReader_runTest() {
+  printf("\nTesting FileReader:\n");
   FileReader* fr = new_FileReader("./assets/sample.txt");
   FileReader_print(fr);
-  FileReader_close(fr);
+  FileReader_free(fr);
 }
 
 void FileReader_print(FileReader* this) {
   for (int x = 0; x < this->length; x++) printf("%s\n", this->line[x]);
 }
 
-void FileReader_close(FileReader* this) {
+void FileReader_free(FileReader* this) {
   if (this == NULL) return;
   for (int x = 0; x < this->length; x++) free(this->line[x]);
   free(this->line);

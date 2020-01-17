@@ -29,6 +29,14 @@ LSystem* new_LSystem(char* start, int depth, double angle) {
   return new;
 }
 
+void LSystem_runTest() {
+  printf("\nTesting LSystem:\n");
+  LSystem* ls = new_LSystem("F[+F]", 2, 45);
+  printf("ls = ");
+  LSystem_print(ls);
+  LSystem_free(ls);
+}
+
 LSystem* LSystem_run(LSystem* this) {
   (this->depth)++;
   this = LSystem_run(this);
