@@ -2,5 +2,8 @@
     "C_Cpp.errorSquiggles": "Disabled",
     "cSpell.ignoreWords": [
         "lsys"
-    ]
+    ],
+    "files.associations": {
+        "file_reader.h": "c"
+    }
 }

@@ -13,6 +13,8 @@ typedef struct {
 
 FileReader* new_FileReader(char* fileName);
 
+void fr_runTest();
+
 void fr_print(FileReader* fr);
 
 void fr_close(FileReader* fr);

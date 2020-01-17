@@ -1,6 +1,6 @@
 #include "file_reader.h"
 
-FileReader* fr_readFile(char* fileName) {
+FileReader* new_FileReader(char* fileName) {
   FileReader* fr = malloc(sizeof(FileReader));
   // dec vars
   FILE* filePointer = fopen(fileName, "r");
@@ -38,6 +38,12 @@ FileReader* fr_readFile(char* fileName) {
   free(stringBuffer);
   fclose(filePointer);
   return fr;
+}
+
+void fr_runTest() {
+  FileReader* fr = new_FileReader("./assets/sample.txt");
+  fr_print(fr);
+  fr_close(fr);
 }
 
 void fr_print(FileReader* fr) {
