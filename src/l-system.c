@@ -29,17 +29,17 @@ LSystem* new_LSystem(char* start, int depth, double angle) {
   return new;
 }
 
-LSystem* lsys_run(LSystem* this) {
+LSystem* LSystem_run(LSystem* this) {
   (this->depth)++;
-  this = lsys_run(this);
+  this = LSystem_run(this);
 }
 
-void lsys_print(LSystem* this) {
+void LSystem_print(LSystem* this) {
   printf("{depth: %d, original: %s, final: %s}\n", this->depth, this->original,
          this->final);
 }
 
-void lsys_free(LSystem* this) {
+void LSystem_free(LSystem* this) {
   if (this != NULL) return;
   free(this->final);
 }

@@ -13,7 +13,7 @@ GLuint textureID[1];
 
 /*  Initialize material property and light source.
  */
-void glSetup_init(void) {
+void GlSetup_init(void) {
   GLfloat light_ambient[] = {0.0, 0.0, 0.0, 1.0};
   GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
   GLfloat light_specular[] = {1.0, 1.0, 1.0, 1.0};
@@ -39,7 +39,7 @@ void glSetup_init(void) {
   glEnable(GL_DEPTH_TEST);
 }
 
-void glSetup_display(void) {
+void GlSetup_display(void) {
   GLfloat blue[] = {0.0, 0.0, 1.0, 1.0};
   GLfloat red[] = {1.0, 0.0, 0.0, 1.0};
   GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
@@ -111,7 +111,7 @@ void glSetup_display(void) {
   glFlush();
 }
 
-void glSetup_reshapeExample(int w, int h) {
+void GlSetup_reshapeExample(int w, int h) {
   glViewport(0, 0, (GLsizei)w, (GLsizei)h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -120,7 +120,7 @@ void glSetup_reshapeExample(int w, int h) {
   glLoadIdentity();
 }
 
-void glSetup_keyboard(unsigned char key, int x, int y) {
+void GlSetup_keyboard(unsigned char key, int x, int y) {
   switch (key) {
     case 27:
     case 'q':
@@ -131,45 +131,45 @@ void glSetup_keyboard(unsigned char key, int x, int y) {
       lighting = 0;
       smoothShading = 0;
       textures = 0;
-      glSetup_init();
-      glSetup_display();
+      GlSetup_init();
+      GlSetup_display();
       break;
     case '2':  // draw polygons as filled
       lineDrawing = 0;
       lighting = 0;
       smoothShading = 0;
       textures = 0;
-      glSetup_init();
-      glSetup_display();
+      GlSetup_init();
+      GlSetup_display();
       break;
     case '3':  // diffuse and specular lighting, flat shading
       lineDrawing = 0;
       lighting = 1;
       smoothShading = 0;
       textures = 0;
-      glSetup_init();
-      glSetup_display();
+      GlSetup_init();
+      GlSetup_display();
       break;
     case '4':  // diffuse and specular lighting, smooth shading
       lineDrawing = 0;
       lighting = 1;
       smoothShading = 1;
       textures = 0;
-      glSetup_init();
-      glSetup_display();
+      GlSetup_init();
+      GlSetup_display();
       break;
     case '5':  // texture with  smooth shading
       lineDrawing = 0;
       lighting = 1;
       smoothShading = 1;
       textures = 1;
-      glSetup_init();
-      glSetup_display();
+      GlSetup_init();
+      GlSetup_display();
       break;
   }
 }
 
-void glSetup_loadTexture(char* filePath) {
+void GlSetup_loadTexture(char* filePath) {
   FILE* fp;
   int i, j;
   int red, green, blue;
@@ -205,19 +205,19 @@ void glSetup_loadTexture(char* filePath) {
   fclose(fp);
 }
 
-void glSetup_run(int argc, char** argv, void (*draw)(void)) {
+void GlSetup_run(int argc, char** argv, void (*draw)(void)) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowSize(1024, 768);
   glutCreateWindow(argv[0]);
   printf("Running OpenGL Version: %s\n", glGetString(GL_VERSION));
-  glSetup_init();
+  GlSetup_init();
 
-  glSetup_loadTexture("./assets/image.txt");
+  GlSetup_loadTexture("./assets/image.txt");
   if (draw != NULL) draw();
 
-  glutReshapeFunc(glSetup_reshapeExample);
-  glutDisplayFunc(glSetup_display);
-  glutKeyboardFunc(glSetup_keyboard);
+  glutReshapeFunc(GlSetup_reshapeExample);
+  glutDisplayFunc(GlSetup_display);
+  glutKeyboardFunc(GlSetup_keyboard);
   glutMainLoop();
 }

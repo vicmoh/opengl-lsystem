@@ -7,16 +7,16 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 
-void glSetup_init(void);
+void GlSetup_init(void);
 
-void glSetup_display(void);
+void GlSetup_display(void);
 
-void glSetup_reshapeExample(int w, int h);
+void GlSetup_reshapeExample(int w, int h);
 
-void glSetup_keyboard(unsigned char key, int x, int y);
+void GlSetup_keyboard(unsigned char key, int x, int y);
 
-void glSetup_loadTexture(char* filePath);
+void GlSetup_loadTexture(char* filePath);
 
-void glSetup_run(int argc, char** argv, void (*draw)(void));
+void GlSetup_run(int argc, char** argv, void (*draw)(void));
 
 #endif

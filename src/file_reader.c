@@ -1,10 +1,9 @@
 #include "file_reader.h"
 
 FileReader* new_FileReader(char* fileName) {
-  FileReader* fr = malloc(sizeof(FileReader));
-  // dec vars
+  FileReader* this = malloc(sizeof(FileReader));
   FILE* filePointer = fopen(fileName, "r");
-  fr->line = calloc(1, sizeof(char*));
+  this->line = calloc(1, sizeof(char*));
   char* stringBuffer = calloc(1, sizeof(char));
   int charBuffer;
   int stringSize = 0;
@@ -26,33 +25,33 @@ FileReader* new_FileReader(char* fileName) {
   // remove the \r\n by tokenizing and adding to array
   char* token = strtok(stringBuffer, "\r\n");
   while (token != NULL) {
-    fr->line[lineSize] = calloc(strlen(token), sizeof(char));
-    strcpy(fr->line[lineSize], token);
+    this->line[lineSize] = calloc(strlen(token), sizeof(char));
+    strcpy(this->line[lineSize], token);
     lineSize++;
-    fr->line = realloc(fr->line, sizeof(fr->line) * (lineSize + 1));
+    this->line = realloc(this->line, sizeof(this->line) * (lineSize + 1));
     token = strtok(NULL, "\r\n");
   }
 
   // set the size and return
-  fr->length = lineSize;
+  this->length = lineSize;
   free(stringBuffer);
   fclose(filePointer);
-  return fr;
+  return this;
 }
 
-void fr_runTest() {
+void FileReader_runTest() {
   FileReader* fr = new_FileReader("./assets/sample.txt");
-  fr_print(fr);
-  fr_close(fr);
+  FileReader_print(fr);
+  FileReader_close(fr);
 }
 
-void fr_print(FileReader* fr) {
-  for (int x = 0; x < fr->length; x++) printf("%s\n", fr->line[x]);
+void FileReader_print(FileReader* this) {
+  for (int x = 0; x < this->length; x++) printf("%s\n", this->line[x]);
 }
 
-void fr_close(FileReader* fr) {
-  if (fr == NULL) return;
-  for (int x = 0; x < fr->length; x++) free(fr->line[x]);
-  free(fr->line);
-  free(fr);
+void FileReader_close(FileReader* this) {
+  if (this == NULL) return;
+  for (int x = 0; x < this->length; x++) free(this->line[x]);
+  free(this->line);
+  free(this);
 }

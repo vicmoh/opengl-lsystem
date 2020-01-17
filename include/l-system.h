@@ -14,10 +14,10 @@ typedef struct {
 
 LSystem* new_LSystem(char* start, int depth, double angle);
 
-LSystem* lsys_run(LSystem* this);
+LSystem* LSystem_run(LSystem* this);
 
-void lsys_print(LSystem* this);
+void LSystem_print(LSystem* this);
 
-void lsys_free(LSystem* this);
+void LSystem_free(LSystem* this);
 
 #endif
