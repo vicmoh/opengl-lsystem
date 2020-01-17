@@ -1,7 +1,7 @@
 #include "file_reader.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 
 FileReader* fr_readFile(char* fileName) {
@@ -41,13 +41,16 @@ FileReader* fr_readFile(char* fileName) {
   fr->length = lineSize;
   free(stringBuffer);
   fclose(filePointer);
-  return fr->line;
+  return fr;
 }
 
-char* fr_print(FileReader* fr) {
+void fr_print(FileReader* fr) {
   for (int x = 0; x < fr->length; x++) printf("%s\n", fr->line[x]);
 }
 
 void fr_close(FileReader* fr) {
-  if (fr != NULL) free(fr);
+  if (fr == NULL) return;
+  for (int x = 0; x < fr->length; x++) free(fr->line[x]);
+  free(fr->line);
+  free(fr);
 }

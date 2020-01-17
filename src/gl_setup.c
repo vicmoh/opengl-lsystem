@@ -111,7 +111,7 @@ void glSetup_display(void) {
   glFlush();
 }
 
-void glSetup_reshape(int w, int h) {
+void glSetup_reshapeExample(int w, int h) {
   glViewport(0, 0, (GLsizei)w, (GLsizei)h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();

@@ -1,3 +1,4 @@
+#include "file_reader.h"
 #include "gl_setup.h"
 
 /**
