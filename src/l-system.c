@@ -20,7 +20,7 @@ LSystem* new_LSystem(char* start, int depth, double angle) {
   new->original = calloc(MAX_MEM, sizeof(char));
   strcpy(new->original, start);
 
-  // get string
+  // Get the process string
   for (int i = 0; i < depth - 1; i++) {
     for (int x = 0; x < strlen(new->original); x++)
       if (new->original[x] == 'F')
