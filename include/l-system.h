@@ -3,11 +3,12 @@
 
 typedef struct {
   int depth;
+	double angle;
   char* final;
   char* original;
 } LSystem;
 
-LSystem* new_LSystem(char* start);
+LSystem* new_LSystem(char* start, int depth, double angle);
 
 LSystem* lsys_run(LSystem* this);
 

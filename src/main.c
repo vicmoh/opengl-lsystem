@@ -8,8 +8,9 @@
 int main(int argc, char** argv) {
   printf("Running...\n");
   // glSetup_run(argc, argv, NULL);
-  LSystem* ls = new_LSystem("F[+F]");
+  LSystem* ls = new_LSystem("F[+F]", 3, 45);
   lsys_print(ls);
+  lsys_free(ls);
   printf("Exiting...\n");
   return 0;
 }
