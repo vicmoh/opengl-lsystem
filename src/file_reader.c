@@ -40,7 +40,7 @@ FileReader* new_FileReader(char* fileName) {
 }
 
 void FileReader_runTest() {
-  printf("\nTesting FileReader:\n");
+  printf("Testing FileReader:\n");
   FileReader* fr = new_FileReader("./assets/sample.txt");
   FileReader_print(fr);
   FileReader_free(fr);

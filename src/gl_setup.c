@@ -39,7 +39,7 @@ void GlSetup_init(void) {
   glEnable(GL_DEPTH_TEST);
 }
 
-void GlSetup_display(void) {
+void GlSetup_displayExample(void) {
   GLfloat blue[] = {0.0, 0.0, 1.0, 1.0};
   GLfloat red[] = {1.0, 0.0, 0.0, 1.0};
   GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
@@ -132,7 +132,7 @@ void GlSetup_keyboard(unsigned char key, int x, int y) {
       smoothShading = 0;
       textures = 0;
       GlSetup_init();
-      GlSetup_display();
+      GlSetup_displayExample();
       break;
     case '2':  // draw polygons as filled
       lineDrawing = 0;
@@ -140,7 +140,7 @@ void GlSetup_keyboard(unsigned char key, int x, int y) {
       smoothShading = 0;
       textures = 0;
       GlSetup_init();
-      GlSetup_display();
+      GlSetup_displayExample();
       break;
     case '3':  // diffuse and specular lighting, flat shading
       lineDrawing = 0;
@@ -148,7 +148,7 @@ void GlSetup_keyboard(unsigned char key, int x, int y) {
       smoothShading = 0;
       textures = 0;
       GlSetup_init();
-      GlSetup_display();
+      GlSetup_displayExample();
       break;
     case '4':  // diffuse and specular lighting, smooth shading
       lineDrawing = 0;
@@ -156,7 +156,7 @@ void GlSetup_keyboard(unsigned char key, int x, int y) {
       smoothShading = 1;
       textures = 0;
       GlSetup_init();
-      GlSetup_display();
+      GlSetup_displayExample();
       break;
     case '5':  // texture with  smooth shading
       lineDrawing = 0;
@@ -164,7 +164,7 @@ void GlSetup_keyboard(unsigned char key, int x, int y) {
       smoothShading = 1;
       textures = 1;
       GlSetup_init();
-      GlSetup_display();
+      GlSetup_displayExample();
       break;
   }
 }
@@ -217,7 +217,7 @@ void GlSetup_run(int argc, char** argv, void (*draw)(void)) {
   if (draw != NULL) draw();
 
   glutReshapeFunc(GlSetup_reshapeExample);
-  glutDisplayFunc(GlSetup_display);
+  glutDisplayFunc(GlSetup_displayExample);
   glutKeyboardFunc(GlSetup_keyboard);
   glutMainLoop();
 }
