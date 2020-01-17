@@ -8,6 +8,11 @@ const bool _RUN_TEST = true;
 const bool _RUN_OPEN_GL = true;
 
 /**
+ * Run the program.
+ **/
+void run(int argc, char** argv) {}
+
+/**
  * Function to be wrap an run.
  **/
 void runTest(int argc, char** argv) {
@@ -15,13 +20,6 @@ void runTest(int argc, char** argv) {
   LSystem_runTest();
   FileReader_runTest();
   printf("-------------------\n\n");
-}
-
-/**
- * Run the program.
- **/
-void run(int argc, char** argv) {
-  
 }
 
 /**
