@@ -9,7 +9,7 @@ TARGET = -mmacosx-version-min=10.8
 BIN = ./bin/
 SRC = ./src/
 CC = gcc
-FLAGS = -Iinclude
+FLAGS = -Wall -pedantic -std=c11 -Iinclude
 m = [AUTO]
 
 all: compile

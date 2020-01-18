@@ -29,6 +29,25 @@ LSystem* new_LSystem(char* start, int depth, double angle) {
   return new;
 }
 
+void LSystem_checkCondition(LSystem* this) {
+  char* original = strdup(this->original);
+  for (int x = 0; x < strlen(original); x++) {
+    char curState = original[x];
+    if (curState == 'F') {
+      glutSolidSphere(1.0, 15, 15);
+    } else if (curState == '+') {
+      glRotatef(this->angle, 0, 0, 1);
+    } else if (curState == '-') {
+      glRotatef(this->angle, 0, 0, 1);
+    } else if (curState == '[') {
+      glPushMatrix();
+    } else if (curState == ']') {
+      glPopMatrix();
+    }
+  }
+  free(original);
+}
+
 void LSystem_runTest() {
   printf("Testing LSystem:\n");
   LSystem* ls = new_LSystem("F[+F]", 2, 45);
@@ -40,6 +59,7 @@ void LSystem_runTest() {
 LSystem* LSystem_run(LSystem* this) {
   (this->depth)++;
   this = LSystem_run(this);
+  return this;
 }
 
 void LSystem_print(LSystem* this) {
