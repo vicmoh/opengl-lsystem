@@ -1,6 +1,9 @@
 
 /* Derived from scene.c in the The OpenGL Programming Guide */
 #include "gl_setup.h"
+#include "stdbool.h"
+
+const bool SHOW_EXAMPLE = false;
 
 /* flags used to control the appearance of the image */
 int GLSetup_lineDrawing = 1;    // draw polygons as solid or lines
@@ -42,6 +45,13 @@ void GlSetup_init(void) {
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
   glEnable(GL_DEPTH_TEST);
+}
+
+void GLSetup_display(void) {
+  if (SHOW_EXAMPLE)
+    GlSetup_displayExample();
+  else
+    GLSetup_displaySetup();
 }
 
 void GlSetup_displayExample(void) {
@@ -111,7 +121,61 @@ void GlSetup_displayExample(void) {
   glFlush();
 }
 
-void GLSetup_displayLSystem() {}
+void GLSetup_displaySetup() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  /* draw surfaces as either smooth or flat shaded */
+  if (GLSetup_smoothShading == 1)
+    glShadeModel(GL_SMOOTH);
+  else
+    glShadeModel(GL_FLAT);
+  /* draw polygons as either solid or outlines */
+  if (GLSetup_lineDrawing == 1)
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  else
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+  GLSetup_draw();
+
+  /* turn texturing on */
+  if (GLSetup_textures == 1) {
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, GLSetup_textureID[0]);
+    /* if textured, then use GLSetup_white as base colour */
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_white);
+  } else if (GLSetup_textures == 1)
+    glDisable(GL_TEXTURE_2D);
+
+  glFlush();
+}
+
+void GLSetup_draw() {
+  /* set starting location of objects */
+  glPushMatrix();
+  glTranslatef(0.0, 0.0, -7.0);
+
+  /* give all objects the same shininess value */
+  glMaterialf(GL_FRONT, GL_SHININESS, 30.0);
+  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_red);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
+  /* move to location for object then draw it */
+  glPushMatrix();
+  glTranslatef(-0.75, -0.5, 0.0);
+  glRotatef(270.0, 1.0, 0.0, 0.0);
+  glutSolidCone(1.0, 2.0, 15, 15);
+  glPopMatrix();
+
+  /* set c  olour of sphere */
+  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_green);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
+  /* move to location for object then draw it */
+  glPushMatrix();
+  glTranslatef(0.75, 0.0, -1.0);
+
+  glutSolidSphere(1.0, 15, 15);
+  glPopMatrix();
+  glPopMatrix();
+  glPopMatrix();
+}
 
 void GlSetup_reshape(int w, int h) {
   glViewport(0, 0, (GLsizei)w, (GLsizei)h);
@@ -128,45 +192,55 @@ void GlSetup_keyboard(unsigned char key, int x, int y) {
     case 'q':
       exit(0);
       break;
+
     case '1':  // draw polygons as outlines
       GLSetup_lineDrawing = 1;
       GLSetup_lighting = 0;
       GLSetup_smoothShading = 0;
       GLSetup_textures = 0;
       GlSetup_init();
-      GlSetup_displayExample();
+      GLSetup_display();
+      printf("1 is clicked.\n");
       break;
+
     case '2':  // draw polygons as filled
       GLSetup_lineDrawing = 0;
       GLSetup_lighting = 0;
       GLSetup_smoothShading = 0;
       GLSetup_textures = 0;
       GlSetup_init();
-      GlSetup_displayExample();
+      GLSetup_display();
+      printf("2 is clicked.\n");
       break;
+
     case '3':  // diffuse and specular lighting, flat shading
       GLSetup_lineDrawing = 0;
       GLSetup_lighting = 1;
       GLSetup_smoothShading = 0;
       GLSetup_textures = 0;
       GlSetup_init();
-      GlSetup_displayExample();
+      GLSetup_display();
+      printf("3 is clicked.\n");
       break;
+
     case '4':  // diffuse and specular lighting, smooth shading
       GLSetup_lineDrawing = 0;
       GLSetup_lighting = 1;
       GLSetup_smoothShading = 1;
       GLSetup_textures = 0;
       GlSetup_init();
-      GlSetup_displayExample();
+      GLSetup_display();
+      printf("4 is clicked.\n");
       break;
+
     case '5':  // texture with  smooth shading
       GLSetup_lineDrawing = 0;
       GLSetup_lighting = 1;
       GLSetup_smoothShading = 1;
       GLSetup_textures = 1;
       GlSetup_init();
-      GlSetup_displayExample();
+      GLSetup_display();
+      printf("5 is clicked.\n");
       break;
   }
 }
@@ -208,19 +282,20 @@ void GlSetup_loadTexture(char* filePath) {
   fclose(fp);
 }
 
-void GlSetup_run(int argc, char** argv, void (*draw)(void)) {
+void GlSetup_run(int argc, char** argv) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowSize(1024, 768);
   glutCreateWindow(argv[0]);
   printf("Running OpenGL Version: %s\n", glGetString(GL_VERSION));
+
+  // Draw
   GlSetup_init();
-
   GlSetup_loadTexture("./assets/image.txt");
-  if (draw != NULL) draw();
-
   glutReshapeFunc(GlSetup_reshape);
-  glutDisplayFunc(GlSetup_displayExample);
+  glutDisplayFunc(GLSetup_display);
   glutKeyboardFunc(GlSetup_keyboard);
+
+  // Loop
   glutMainLoop();
 }

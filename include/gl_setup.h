@@ -9,16 +9,23 @@
 
 void GlSetup_init(void);
 
+void GLSetup_draw();
+
+void GLSetup_display();
+
+void GLSetup_displaySetup();
+
 void GlSetup_displayExample(void);
 
-void GLSetup_drawLSystem(void);
+void GLSetup_displayLSystem(void);
 
 void GlSetup_reshape(int w, int h);
+
 
 void GlSetup_keyboard(unsigned char key, int x, int y);
 
 void GlSetup_loadTexture(char* filePath);
 
-void GlSetup_run(int argc, char** argv, void (*draw)(void));
+void GlSetup_run(int argc, char** argv);
 
 #endif
