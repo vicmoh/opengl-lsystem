@@ -158,22 +158,22 @@ void GLSetup_draw() {
   glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_red);
   glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
   /* move to location for object then draw it */
-  glPushMatrix();
+  // glPushMatrix();
   glTranslatef(-0.75, -0.5, 0.0);
   glRotatef(270.0, 1.0, 0.0, 0.0);
   glutSolidCone(1.0, 2.0, 15, 15);
-  glPopMatrix();
+  // glPopMatrix();
 
   /* set c  olour of sphere */
   glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_green);
   glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
   /* move to location for object then draw it */
-  glPushMatrix();
+  // glPushMatrix();
   glTranslatef(0.75, 0.0, -1.0);
 
   glutSolidSphere(1.0, 15, 15);
-  glPopMatrix();
-  glPopMatrix();
+  // glPopMatrix();
+  // glPopMatrix();
   glPopMatrix();
 }
 

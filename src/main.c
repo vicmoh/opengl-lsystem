@@ -10,7 +10,19 @@ const bool _RUN_OPEN_GL = true;
 /**
  * Run the program.
  **/
-void run(int argc, char** argv) { GlSetup_run(argc, argv); }
+void run(int argc, char** argv) {
+  // Init
+  FileReader* fr = new_FileReader("./assets/sample1.txt");
+  LSystem* lSys =
+      new_LSystem(fr->line[0], atoi(fr->line[1]), atof(fr->line[2]));
+
+  // Run
+  GlSetup_run(argc, argv);
+
+  // Program
+  FileReader_free(fr);
+  LSystem_free(lSys);
+}
 
 /**
  * Function to be wrap an run.
