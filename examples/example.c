@@ -13,7 +13,7 @@
 #include <OpenGL/glu.h>
 
 /* flags used to control the appearance of the image */
-int lineDrawing = 1;    // draw polygons as solid or lines
+int GLSetup_lineDrawing = 1;    // draw polygons as solid or lines
 int lighting = 0;       // use diffuse and specular lighting
 int smoothShading = 0;  // smooth or flat shading
 int textures = 0;
@@ -65,7 +65,7 @@ void display(void) {
     glShadeModel(GL_FLAT);
 
   /* draw polygons as either solid or outlines */
-  if (lineDrawing == 1)
+  if (GLSetup_lineDrawing == 1)
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   else
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -138,7 +138,7 @@ void keyboard(unsigned char key, int x, int y) {
       exit(0);
       break;
     case '1':  // draw polygons as outlines
-      lineDrawing = 1;
+      GLSetup_lineDrawing = 1;
       lighting = 0;
       smoothShading = 0;
       textures = 0;
@@ -146,7 +146,7 @@ void keyboard(unsigned char key, int x, int y) {
       display();
       break;
     case '2':  // draw polygons as filled
-      lineDrawing = 0;
+      GLSetup_lineDrawing = 0;
       lighting = 0;
       smoothShading = 0;
       textures = 0;
@@ -154,7 +154,7 @@ void keyboard(unsigned char key, int x, int y) {
       display();
       break;
     case '3':  // diffuse and specular lighting, flat shading
-      lineDrawing = 0;
+      GLSetup_lineDrawing = 0;
       lighting = 1;
       smoothShading = 0;
       textures = 0;
@@ -162,7 +162,7 @@ void keyboard(unsigned char key, int x, int y) {
       display();
       break;
     case '4':  // diffuse and specular lighting, smooth shading
-      lineDrawing = 0;
+      GLSetup_lineDrawing = 0;
       lighting = 1;
       smoothShading = 1;
       textures = 0;
@@ -170,7 +170,7 @@ void keyboard(unsigned char key, int x, int y) {
       display();
       break;
     case '5':  // texture with  smooth shading
-      lineDrawing = 0;
+      GLSetup_lineDrawing = 0;
       lighting = 1;
       smoothShading = 1;
       textures = 1;

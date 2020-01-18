@@ -11,6 +11,8 @@ void GlSetup_init(void);
 
 void GlSetup_displayExample(void);
 
+void GLSetup_drawLSystem(void);
+
 void GlSetup_reshape(int w, int h);
 
 void GlSetup_keyboard(unsigned char key, int x, int y);

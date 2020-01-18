@@ -1,13 +1,13 @@
 {
-    "C_Cpp.errorSquiggles": "Disabled",
-    "cSpell.ignoreWords": [
-        "lsys"
-    ],
     "files.associations": {
         "file_reader.h": "c",
         "*.tcc": "c",
         "istream": "c",
         "ostream": "c",
-        "typeinfo": "c"
-    }
+        "typeinfo": "c",
+        "l-system.h": "c",
+        "gl_setup.h": "c",
+        "stdlib.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
 }

@@ -3,13 +3,18 @@
 #include "gl_setup.h"
 
 /* flags used to control the appearance of the image */
-int lineDrawing = 1;    // draw polygons as solid or lines
-int lighting = 0;       // use diffuse and specular lighting
-int smoothShading = 0;  // smooth or flat shading
-int textures = 0;
+int GLSetup_lineDrawing = 1;    // draw polygons as solid or lines
+int GLSetup_lighting = 0;       // use diffuse and specular lighting
+int GLSetup_smoothShading = 0;  // smooth or flat shading
+int GLSetup_textures = 0;
 
-GLubyte Image[64][64][4];
-GLuint textureID[1];
+GLuint GLSetup_textureID[1];
+
+// Colors
+GLfloat GLSetup_blue[] = {0.0, 0.0, 1.0, 1.0};
+GLfloat GLSetup_red[] = {1.0, 0.0, 0.0, 1.0};
+GLfloat GLSetup_green[] = {0.0, 1.0, 0.0, 1.0};
+GLfloat GLSetup_white[] = {1.0, 1.0, 1.0, 1.0};
 
 /*  Initialize material property and light source.
  */
@@ -23,7 +28,7 @@ void GlSetup_init(void) {
 
   /* if lighting is turned on then use ambient, diffuse and specular
      lights, otherwise use ambient lighting only */
-  if (lighting == 1) {
+  if (GLSetup_lighting == 1) {
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
@@ -40,21 +45,16 @@ void GlSetup_init(void) {
 }
 
 void GlSetup_displayExample(void) {
-  GLfloat blue[] = {0.0, 0.0, 1.0, 1.0};
-  GLfloat red[] = {1.0, 0.0, 0.0, 1.0};
-  GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
-  GLfloat white[] = {1.0, 1.0, 1.0, 1.0};
-
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   /* draw surfaces as either smooth or flat shaded */
-  if (smoothShading == 1)
+  if (GLSetup_smoothShading == 1)
     glShadeModel(GL_SMOOTH);
   else
     glShadeModel(GL_FLAT);
 
   /* draw polygons as either solid or outlines */
-  if (lineDrawing == 1)
+  if (GLSetup_lineDrawing == 1)
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   else
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -68,8 +68,8 @@ void GlSetup_displayExample(void) {
   glMaterialf(GL_FRONT, GL_SHININESS, 30.0);
 
   /* set colour of cone */
-  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_red);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
   /* move to location for object then draw it */
   glPushMatrix();
   glTranslatef(-0.75, -0.5, 0.0);
@@ -78,28 +78,28 @@ void GlSetup_displayExample(void) {
   glPopMatrix();
 
   /* set colour of sphere */
-  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, green);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_green);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
   /* move to location for object then draw it */
   glPushMatrix();
   glTranslatef(0.75, 0.0, -1.0);
 
   /* turn texturing on */
-  if (textures == 1) {
+  if (GLSetup_textures == 1) {
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureID[0]);
-    /* if textured, then use white as base colour */
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, white);
+    glBindTexture(GL_TEXTURE_2D, GLSetup_textureID[0]);
+    /* if textured, then use GLSetup_white as base colour */
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_white);
   }
 
   glutSolidSphere(1.0, 15, 15);
 
-  if (textures == 1) glDisable(GL_TEXTURE_2D);
+  if (GLSetup_textures == 1) glDisable(GL_TEXTURE_2D);
   glPopMatrix();
 
   /* set colour of torus */
-  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, blue);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_blue);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
   /* move to location for object then draw it */
   glPushMatrix();
   glTranslatef(-0.75, 0.5, 0.0);
@@ -110,6 +110,8 @@ void GlSetup_displayExample(void) {
   glPopMatrix();
   glFlush();
 }
+
+void GLSetup_displayLSystem() {}
 
 void GlSetup_reshape(int w, int h) {
   glViewport(0, 0, (GLsizei)w, (GLsizei)h);
@@ -127,42 +129,42 @@ void GlSetup_keyboard(unsigned char key, int x, int y) {
       exit(0);
       break;
     case '1':  // draw polygons as outlines
-      lineDrawing = 1;
-      lighting = 0;
-      smoothShading = 0;
-      textures = 0;
+      GLSetup_lineDrawing = 1;
+      GLSetup_lighting = 0;
+      GLSetup_smoothShading = 0;
+      GLSetup_textures = 0;
       GlSetup_init();
       GlSetup_displayExample();
       break;
     case '2':  // draw polygons as filled
-      lineDrawing = 0;
-      lighting = 0;
-      smoothShading = 0;
-      textures = 0;
+      GLSetup_lineDrawing = 0;
+      GLSetup_lighting = 0;
+      GLSetup_smoothShading = 0;
+      GLSetup_textures = 0;
       GlSetup_init();
       GlSetup_displayExample();
       break;
     case '3':  // diffuse and specular lighting, flat shading
-      lineDrawing = 0;
-      lighting = 1;
-      smoothShading = 0;
-      textures = 0;
+      GLSetup_lineDrawing = 0;
+      GLSetup_lighting = 1;
+      GLSetup_smoothShading = 0;
+      GLSetup_textures = 0;
       GlSetup_init();
       GlSetup_displayExample();
       break;
     case '4':  // diffuse and specular lighting, smooth shading
-      lineDrawing = 0;
-      lighting = 1;
-      smoothShading = 1;
-      textures = 0;
+      GLSetup_lineDrawing = 0;
+      GLSetup_lighting = 1;
+      GLSetup_smoothShading = 1;
+      GLSetup_textures = 0;
       GlSetup_init();
       GlSetup_displayExample();
       break;
     case '5':  // texture with  smooth shading
-      lineDrawing = 0;
-      lighting = 1;
-      smoothShading = 1;
-      textures = 1;
+      GLSetup_lineDrawing = 0;
+      GLSetup_lighting = 1;
+      GLSetup_smoothShading = 1;
+      GLSetup_textures = 1;
       GlSetup_init();
       GlSetup_displayExample();
       break;
@@ -172,7 +174,8 @@ void GlSetup_keyboard(unsigned char key, int x, int y) {
 void GlSetup_loadTexture(char* filePath) {
   FILE* fp;
   int i, j;
-  int red, green, blue;
+  int GLSetup_red, GLSetup_green, GLSetup_blue;
+  GLubyte Image[64][64][4];
 
   if ((fp = fopen(filePath, "r")) == 0) {
     printf("Error, failed to find the file named image.txt.\n");
@@ -181,17 +184,17 @@ void GlSetup_loadTexture(char* filePath) {
 
   for (i = 0; i < 64; i++) {
     for (j = 0; j < 64; j++) {
-      fscanf(fp, "%d %d %d", &red, &green, &blue);
-      Image[i][j][0] = red;
-      Image[i][j][1] = green;
-      Image[i][j][2] = blue;
+      fscanf(fp, "%d %d %d", &GLSetup_red, &GLSetup_green, &GLSetup_blue);
+      Image[i][j][0] = GLSetup_red;
+      Image[i][j][1] = GLSetup_green;
+      Image[i][j][2] = GLSetup_blue;
       Image[i][j][3] = 255;
     }
   }
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  glGenTextures(1, textureID);
-  glBindTexture(GL_TEXTURE_2D, textureID[0]);
+  glGenTextures(1, GLSetup_textureID);
+  glBindTexture(GL_TEXTURE_2D, GLSetup_textureID[0]);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
