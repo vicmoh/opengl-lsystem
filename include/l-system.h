@@ -1,13 +1,13 @@
 #ifndef _L_SYSTEM_
 #define _L_SYSTEM_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <GLUT/glut.h>
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "file_reader.h"
 
 typedef struct {
   int depth;
@@ -18,9 +18,15 @@ typedef struct {
 
 LSystem* new_LSystem(char* start, int depth, double angle);
 
+void LSystem_setFile(char* file);
+
+void LSystem_checkCondition(LSystem* this);
+
+void LSystem_draw();
+
 void LSystem_runTest();
 
-LSystem* LSystem_run(LSystem* this);
+LSystem* LSystem_recurse(LSystem* this);
 
 void LSystem_print(LSystem* this);
 

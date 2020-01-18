@@ -282,7 +282,7 @@ void GlSetup_loadTexture(char* filePath) {
   fclose(fp);
 }
 
-void GlSetup_run(int argc, char** argv) {
+void GlSetup_run(int argc, char** argv, void (*draw)(void)) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowSize(1024, 768);
@@ -293,7 +293,7 @@ void GlSetup_run(int argc, char** argv) {
   GlSetup_init();
   GlSetup_loadTexture("./assets/image.txt");
   glutReshapeFunc(GlSetup_reshape);
-  glutDisplayFunc(GLSetup_display);
+  glutDisplayFunc(draw);
   glutKeyboardFunc(GlSetup_keyboard);
 
   // Loop

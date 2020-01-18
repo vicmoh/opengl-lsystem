@@ -1,5 +1,7 @@
 #include "l-system.h"
 
+FileReader* LSystem_fileReader = NULL;
+
 LSystem* new_LSystem(char* start, int depth, double angle) {
   if (start == NULL) return NULL;
   const int MAX_MEM = 256 * 8;
@@ -29,23 +31,43 @@ LSystem* new_LSystem(char* start, int depth, double angle) {
   return new;
 }
 
+void LSystem_setFile(char* fileName) {
+  if (fileName == NULL) return;
+  LSystem_fileReader = new_FileReader(fileName);
+}
+
+void LSystem_draw() {
+  if (LSystem_fileReader == NULL) printf("Warning: File reader is null.\n");
+  LSystem* ls = new_LSystem(LSystem_fileReader->line[2],
+                            atoi(LSystem_fileReader->line[1]),
+                            atof(LSystem_fileReader->line[0]));
+  LSystem_checkCondition(ls);
+  LSystem_free(ls);
+}
+
 void LSystem_checkCondition(LSystem* this) {
-  char* original = strdup(this->original);
-  for (int x = 0; x < strlen(original); x++) {
-    char curState = original[x];
+  char* final = strdup(this->final);
+  printf("Drawing: %s\n", final);
+  for (int x = 0; x < strlen(final); x++) {
+    char curState = final[x];
     if (curState == 'F') {
+      printf("Draw solid sphere.\n");
       glutSolidSphere(1.0, 15, 15);
     } else if (curState == '+') {
+      printf("Rotate z axis by %f degrees to the right.\n", this->angle);
       glRotatef(this->angle, 0, 0, 1);
     } else if (curState == '-') {
+      printf("Rotate z axis by %f degrees to the left.\n", this->angle);
       glRotatef(this->angle, 0, 0, 1);
     } else if (curState == '[') {
+      printf("Push matrix.\n");
       glPushMatrix();
     } else if (curState == ']') {
+      printf("Pop matrix.\n");
       glPopMatrix();
     }
-  }
-  free(original);
+  
+  free(final);
 }
 
 void LSystem_runTest() {
@@ -56,9 +78,9 @@ void LSystem_runTest() {
   LSystem_free(ls);
 }
 
-LSystem* LSystem_run(LSystem* this) {
+LSystem* LSystem_recurse(LSystem* this) {
   (this->depth)++;
-  this = LSystem_run(this);
+  this = LSystem_recurse(this);
   return this;
 }
 
