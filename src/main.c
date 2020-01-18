@@ -10,10 +10,7 @@ const bool _RUN_OPEN_GL = true;
 /**
  * Run the program.
  **/
-void run(int argc, char** argv) {
-  LSystem_setFile("./assets/sample1.txt");
-  GlSetup_run(argc, argv, LSystem_draw);
-}
+void run(int argc, char** argv) { GlSetup_run(argc, argv); }
 
 /**
  * Function to be wrap an run.

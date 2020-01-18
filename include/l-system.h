@@ -18,12 +18,6 @@ typedef struct {
 
 LSystem* new_LSystem(char* start, int depth, double angle);
 
-void LSystem_setFile(char* file);
-
-void LSystem_checkCondition(LSystem* this);
-
-void LSystem_draw();
-
 void LSystem_runTest();
 
 LSystem* LSystem_recurse(LSystem* this);

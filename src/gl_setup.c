@@ -51,7 +51,53 @@ void GLSetup_display(void) {
   if (SHOW_EXAMPLE)
     GlSetup_displayExample();
   else
-    GLSetup_displaySetup();
+    GlSetup_displayLSystem();
+}
+
+void GlSetup_drawLSystem() {
+  FileReader* fr = new_FileReader("./assets/sample1.txt");
+  LSystem* ls = new_LSystem(fr->line[2], atoi(fr->line[1]), atof(fr->line[0]));
+  /* set starting location of objects */
+  glPushMatrix();
+  glTranslatef(0.0, 0.0, -7.0);
+  glRotatef(20.0, 1.0, 0.0, 0.0);
+  GlSetup_LSystemCondition(ls->final, ls->angle);
+  glPopMatrix();
+  // Free
+  LSystem_free(ls);
+}
+
+void GlSetup_setMaterial() {
+  glMaterialf(GL_FRONT, GL_SHININESS, 30.0);
+  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_red);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
+}
+
+void GlSetup_LSystemCondition(char* start, double angle) {
+  char* final = strdup(start);
+  printf("Drawing: %s\n", final);
+
+  GlSetup_setMaterial();
+  for (int x = 0; x < strlen(final); x++) {
+    char curState = final[x];
+    if (curState == 'F') {
+      printf("Draw solid sphere.\n");
+      glutSolidSphere(1, 15, 15);
+    } else if (curState == '+') {
+      printf("Rotate z axis by %f degrees to the right.\n", angle);
+      glRotatef(angle, 0, 0, 1);
+    } else if (curState == '-') {
+      printf("Rotate z axis by %f degrees to the left.\n", angle);
+      glRotatef(-angle, 0, 0, 1);
+    } else if (curState == '[') {
+      printf("Push matrix.\n");
+      glPushMatrix();
+    } else if (curState == ']') {
+      printf("Pop matrix.\n");
+      glPopMatrix();
+    }
+  }
+  free(final);
 }
 
 void GlSetup_displayExample(void) {
@@ -121,7 +167,7 @@ void GlSetup_displayExample(void) {
   glFlush();
 }
 
-void GLSetup_displaySetup() {
+void GlSetup_displayLSystem() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   /* draw surfaces as either smooth or flat shaded */
   if (GLSetup_smoothShading == 1)
@@ -134,7 +180,7 @@ void GLSetup_displaySetup() {
   else
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-  GLSetup_draw();
+  GlSetup_drawLSystem();
 
   /* turn texturing on */
   if (GLSetup_textures == 1) {
@@ -144,37 +190,7 @@ void GLSetup_displaySetup() {
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_white);
   } else if (GLSetup_textures == 1)
     glDisable(GL_TEXTURE_2D);
-
   glFlush();
-}
-
-void GLSetup_draw() {
-  /* set starting location of objects */
-  glPushMatrix();
-  glTranslatef(0.0, 0.0, -7.0);
-
-  /* give all objects the same shininess value */
-  glMaterialf(GL_FRONT, GL_SHININESS, 30.0);
-  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_red);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
-  /* move to location for object then draw it */
-  // glPushMatrix();
-  glTranslatef(-0.75, -0.5, 0.0);
-  glRotatef(270.0, 1.0, 0.0, 0.0);
-  glutSolidCone(1.0, 2.0, 15, 15);
-  // glPopMatrix();
-
-  /* set c  olour of sphere */
-  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_green);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
-  /* move to location for object then draw it */
-  // glPushMatrix();
-  glTranslatef(0.75, 0.0, -1.0);
-
-  glutSolidSphere(1.0, 15, 15);
-  // glPopMatrix();
-  // glPopMatrix();
-  glPopMatrix();
 }
 
 void GlSetup_reshape(int w, int h) {
@@ -282,7 +298,7 @@ void GlSetup_loadTexture(char* filePath) {
   fclose(fp);
 }
 
-void GlSetup_run(int argc, char** argv, void (*draw)(void)) {
+void GlSetup_run(int argc, char** argv) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowSize(1024, 768);
@@ -293,7 +309,7 @@ void GlSetup_run(int argc, char** argv, void (*draw)(void)) {
   GlSetup_init();
   GlSetup_loadTexture("./assets/image.txt");
   glutReshapeFunc(GlSetup_reshape);
-  glutDisplayFunc(draw);
+  glutDisplayFunc(GLSetup_display);
   glutKeyboardFunc(GlSetup_keyboard);
 
   // Loop
