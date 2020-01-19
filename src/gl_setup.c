@@ -59,6 +59,7 @@ void GlSetup_drawLSystem() {
   LSystem* ls = new_LSystem(fr->line[2], atoi(fr->line[1]), atof(fr->line[0]));
   /* set starting location of objects */
   glPushMatrix();
+  glTranslatef(0, 0, 0);
   glTranslatef(0.0, 0.0, -7.0);
   glRotatef(20.0, 1.0, 0.0, 0.0);
   GlSetup_LSystemCondition(ls->final, ls->angle);
