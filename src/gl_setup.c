@@ -75,28 +75,31 @@ void GLSetup_setMaterial() {
 }
 
 void GLSetup_LSystemCondition(char* start, double angle) {
+  const bool SHOW_DEBUG = false;
   char* final = strdup(start);
   printf("Drawing: %s\n", final);
   GLSetup_setMaterial();
   for (int x = 0; x < strlen(final); x++) {
     char curState = final[x];
     if (curState == 'F') {
-      printf("Draw solid sphere.\n");
+      if (SHOW_DEBUG) printf("Draw solid sphere.\n");
       glutSolidSphere(0.1, 15, 15);
     } else if (curState == '+') {
-      printf("Rotate z axis by %f degrees to the right.\n", angle);
+      if (SHOW_DEBUG)
+        printf("Rotate z axis by %f degrees to the right.\n", angle);
       glRotatef(angle, 0, 0, 1);
       glTranslatef(0, 0.2, 0);
     } else if (curState == '-') {
-      printf("Rotate z axis by %f degrees to the left.\n", angle);
+      if (SHOW_DEBUG)
+        printf("Rotate z axis by %f degrees to the left.\n", angle);
       glRotatef(-angle, 0, 0, 1);
       glTranslatef(0, 0.2, 0);
     } else if (curState == '[') {
-      printf("Push matrix.\n");
+      if (SHOW_DEBUG) printf("Push matrix.\n");
       glPushMatrix();
       glTranslatef(0, 0.2, 0);
     } else if (curState == ']') {
-      printf("Pop matrix.\n");
+      if (SHOW_DEBUG) printf("Pop matrix.\n");
       glPopMatrix();
       glTranslatef(0, 0.2, 0);
     }
@@ -302,6 +305,15 @@ void GLSetup_loadTexture(char* filePath) {
   fclose(fp);
 }
 
+void GLSetup_mouseControl(int button, int state, int x, int y) {
+  const bool SHOW_DEBUG = true;
+  const char DEBUG[] = "GLSetup_mouseControl():";
+  if (GLUT_LEFT_BUTTON == button) {
+    if (SHOW_DEBUG) printf("%s x value is %d.\n", DEBUG, x);
+    if (SHOW_DEBUG) printf("%s x value is %d.\n", DEBUG, y);
+  }
+}
+
 void GLSetup_run(int argc, char** argv) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
@@ -312,6 +324,7 @@ void GLSetup_run(int argc, char** argv) {
   // Draw
   GLSetup_init();
   GLSetup_loadTexture("./assets/image.txt");
+  glutMouseFunc(GLSetup_mouseControl);
   glutReshapeFunc(GLSetup_reshape);
   glutDisplayFunc(GLSetup_display);
   glutKeyboardFunc(GLSetup_keyboard);

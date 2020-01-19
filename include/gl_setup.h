@@ -34,6 +34,8 @@ void GLSetup_keyboard(unsigned char key, int x, int y);
 
 void GLSetup_loadTexture(char* filePath);
 
+void GLSetup_mouseControl(int button, int state, int x, int y);
+
 void GLSetup_run(int argc, char** argv);
 
 #endif
