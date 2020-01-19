@@ -20,10 +20,17 @@ LSystem* new_LSystem(char* start, int depth, double angle) {
   // Get the process string
   for (int i = 0; i < depth - 1; i++) {
     for (int x = 0; x < strlen(new->original); x++)
-      if (new->original[x] == 'F')
+      if (new->original[x] == 'F') {
+        new->final = realloc(
+            new->final,
+            sizeof(char) * (strlen(new->final) + strlen(new->original) + 4));
         sprintf(new->final, "%sF%s", new->final, new->original);
-      else
+      } else {
+        new->final = realloc(
+            new->final,
+            sizeof(char) * (strlen(new->final) + strlen(new->original) + 4));
         sprintf(new->final, "%s%c", new->final, new->original[x]);
+      }
   }
   return new;
 }

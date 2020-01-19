@@ -19,6 +19,8 @@ GLfloat GLSetup_red[] = {1.0, 0.0, 0.0, 1.0};
 GLfloat GLSetup_green[] = {0.0, 1.0, 0.0, 1.0};
 GLfloat GLSetup_white[] = {1.0, 1.0, 1.0, 1.0};
 
+GLPoint GLSetup_camera = {.x = 0, .y = 0, .z = 0};
+
 /*  Initialize material property and light source.
  */
 void GLSetup_init(void) {
@@ -47,11 +49,9 @@ void GLSetup_init(void) {
   glEnable(GL_DEPTH_TEST);
 }
 
-void GLSetup_display(void) {
-  if (SHOW_EXAMPLE)
-    GLSetup_displayExample();
-  else
-    GLSetup_displayLSystem();
+void GLSetup_redraw(void) {
+  GLSetup_init();
+  GLSetup_displayLSystem();
 }
 
 void GLSetup_drawLSystem() {
@@ -77,7 +77,7 @@ void GLSetup_setMaterial() {
 void GLSetup_LSystemCondition(char* start, double angle) {
   const bool SHOW_DEBUG = false;
   char* final = strdup(start);
-  printf("Drawing: %s\n", final);
+  if (SHOW_DEBUG) printf("Drawing: %s\n", final);
   GLSetup_setMaterial();
   for (int x = 0; x < strlen(final); x++) {
     char curState = final[x];
@@ -88,90 +88,23 @@ void GLSetup_LSystemCondition(char* start, double angle) {
       if (SHOW_DEBUG)
         printf("Rotate z axis by %f degrees to the right.\n", angle);
       glRotatef(angle, 0, 0, 1);
-      glTranslatef(0, 0.2, 0);
+      glTranslatef(0, 0.2, 0 + GLSetup_camera.z);
     } else if (curState == '-') {
       if (SHOW_DEBUG)
         printf("Rotate z axis by %f degrees to the left.\n", angle);
       glRotatef(-angle, 0, 0, 1);
-      glTranslatef(0, 0.2, 0);
+      glTranslatef(0, 0.2, 0 + GLSetup_camera.z);
     } else if (curState == '[') {
       if (SHOW_DEBUG) printf("Push matrix.\n");
       glPushMatrix();
-      glTranslatef(0, 0.2, 0);
+      glTranslatef(0, 0.2, 0 + GLSetup_camera.z);
     } else if (curState == ']') {
       if (SHOW_DEBUG) printf("Pop matrix.\n");
       glPopMatrix();
-      glTranslatef(0, 0.2, 0);
+      glTranslatef(0, 0.2, 0 + GLSetup_camera.z);
     }
   }
   free(final);
-}
-
-void GLSetup_displayExample(void) {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  /* draw surfaces as either smooth or flat shaded */
-  if (GLSetup_smoothShading == 1)
-    glShadeModel(GL_SMOOTH);
-  else
-    glShadeModel(GL_FLAT);
-
-  /* draw polygons as either solid or outlines */
-  if (GLSetup_lineDrawing == 1)
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  else
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-  /* set starting location of objects */
-  glPushMatrix();
-  glTranslatef(0.0, 0.0, -7.0);
-  glRotatef(20.0, 1.0, 0.0, 0.0);
-
-  /* give all objects the same shininess value */
-  glMaterialf(GL_FRONT, GL_SHININESS, 30.0);
-
-  /* set colour of cone */
-  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_red);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
-  /* move to location for object then draw it */
-  glPushMatrix();
-  glTranslatef(-0.75, -0.5, 0.0);
-  glRotatef(270.0, 1.0, 0.0, 0.0);
-  glutSolidCone(1.0, 2.0, 15, 15);
-  glPopMatrix();
-
-  /* set colour of sphere */
-  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_green);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
-  /* move to location for object then draw it */
-  glPushMatrix();
-  glTranslatef(0.75, 0.0, -1.0);
-
-  /* turn texturing on */
-  if (GLSetup_textures == 1) {
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, GLSetup_textureID[0]);
-    /* if textured, then use GLSetup_white as base colour */
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_white);
-  }
-
-  glutSolidSphere(1.0, 15, 15);
-
-  if (GLSetup_textures == 1) glDisable(GL_TEXTURE_2D);
-  glPopMatrix();
-
-  /* set colour of torus */
-  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_blue);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
-  /* move to location for object then draw it */
-  glPushMatrix();
-  glTranslatef(-0.75, 0.5, 0.0);
-  glRotatef(90.0, 1.0, 0.0, 0.0);
-  glutSolidTorus(0.275, 0.85, 15, 15);
-  glPopMatrix();
-
-  glPopMatrix();
-  glFlush();
 }
 
 void GLSetup_displayLSystem() {
@@ -216,13 +149,24 @@ void GLSetup_keyboard(unsigned char key, int x, int y) {
       exit(0);
       break;
 
+    case 'i':
+      GLSetup_camera.z+=0.1;
+      GLSetup_redraw();
+      printf("i key is pressed, z=%f.\n", GLSetup_camera.z);
+      break;
+
+    case 'k':
+      GLSetup_camera.z-=0.1;
+      GLSetup_redraw();
+      printf("k key is pressed, z=%f.\n", GLSetup_camera.z);
+      break;
+
     case '1':  // draw polygons as outlines
       GLSetup_lineDrawing = 1;
       GLSetup_lighting = 0;
       GLSetup_smoothShading = 0;
       GLSetup_textures = 0;
-      GLSetup_init();
-      GLSetup_display();
+      GLSetup_redraw();
       printf("1 is clicked.\n");
       break;
 
@@ -231,8 +175,7 @@ void GLSetup_keyboard(unsigned char key, int x, int y) {
       GLSetup_lighting = 0;
       GLSetup_smoothShading = 0;
       GLSetup_textures = 0;
-      GLSetup_init();
-      GLSetup_display();
+      GLSetup_redraw();
       printf("2 is clicked.\n");
       break;
 
@@ -241,8 +184,7 @@ void GLSetup_keyboard(unsigned char key, int x, int y) {
       GLSetup_lighting = 1;
       GLSetup_smoothShading = 0;
       GLSetup_textures = 0;
-      GLSetup_init();
-      GLSetup_display();
+      GLSetup_redraw();
       printf("3 is clicked.\n");
       break;
 
@@ -251,8 +193,7 @@ void GLSetup_keyboard(unsigned char key, int x, int y) {
       GLSetup_lighting = 1;
       GLSetup_smoothShading = 1;
       GLSetup_textures = 0;
-      GLSetup_init();
-      GLSetup_display();
+      GLSetup_redraw();
       printf("4 is clicked.\n");
       break;
 
@@ -261,8 +202,7 @@ void GLSetup_keyboard(unsigned char key, int x, int y) {
       GLSetup_lighting = 1;
       GLSetup_smoothShading = 1;
       GLSetup_textures = 1;
-      GLSetup_init();
-      GLSetup_display();
+      GLSetup_redraw();
       printf("5 is clicked.\n");
       break;
   }
@@ -310,7 +250,8 @@ void GLSetup_mouseControl(int button, int state, int x, int y) {
   const char DEBUG[] = "GLSetup_mouseControl():";
   if (GLUT_LEFT_BUTTON == button) {
     if (SHOW_DEBUG) printf("%s x value is %d.\n", DEBUG, x);
-    if (SHOW_DEBUG) printf("%s x value is %d.\n", DEBUG, y);
+    if (SHOW_DEBUG) printf("%s y value is %d.\n", DEBUG, y);
+    GLSetup_camera.z = y;
   }
 }
 
@@ -326,7 +267,7 @@ void GLSetup_run(int argc, char** argv) {
   GLSetup_loadTexture("./assets/image.txt");
   glutMouseFunc(GLSetup_mouseControl);
   glutReshapeFunc(GLSetup_reshape);
-  glutDisplayFunc(GLSetup_display);
+  glutDisplayFunc(GLSetup_redraw);
   glutKeyboardFunc(GLSetup_keyboard);
 
   // Loop

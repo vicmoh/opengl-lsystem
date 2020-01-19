@@ -16,7 +16,7 @@ typedef struct {
 
 void GLSetup_init(void);
 
-void GLSetup_display();
+void GLSetup_redraw();
 
 void GLSetup_displayLSystem();
 
@@ -25,8 +25,6 @@ void GLSetup_drawLSystem();
 void GLSetup_setMaterial();
 
 void GLSetup_LSystemCondition(char* start, double angle);
-
-void GLSetup_displayExample(void);
 
 void GLSetup_reshape(int w, int h);
 
