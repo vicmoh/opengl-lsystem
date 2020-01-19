@@ -70,7 +70,7 @@ void GLSetup_drawLSystem() {
 
 void GLSetup_setMaterial() {
   glMaterialf(GL_FRONT, GL_SHININESS, 30.0);
-  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_red);
+  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_green);
   glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
 }
 
