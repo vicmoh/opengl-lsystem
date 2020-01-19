@@ -76,24 +76,28 @@ void GlSetup_setMaterial() {
 void GlSetup_LSystemCondition(char* start, double angle) {
   char* final = strdup(start);
   printf("Drawing: %s\n", final);
-  GSetup_setMaterial();
+  GlSetup_setMaterial();
   for (int x = 0; x < strlen(final); x++) {
     char curState = final[x];
     if (curState == 'F') {
       printf("Draw solid sphere.\n");
-      glutSolidSphere(1, 15, 15);
+      glutSolidSphere(0.1, 15, 15);
     } else if (curState == '+') {
       printf("Rotate z axis by %f degrees to the right.\n", angle);
       glRotatef(angle, 0, 0, 1);
+      glTranslatef(0, 0.2, 0);
     } else if (curState == '-') {
       printf("Rotate z axis by %f degrees to the left.\n", angle);
       glRotatef(-angle, 0, 0, 1);
+      glTranslatef(0, 0.2, 0);
     } else if (curState == '[') {
       printf("Push matrix.\n");
       glPushMatrix();
+      glTranslatef(0, 0.2, 0);
     } else if (curState == ']') {
       printf("Pop matrix.\n");
       glPopMatrix();
+      glTranslatef(0, 0.2, 0);
     }
   }
   free(final);
