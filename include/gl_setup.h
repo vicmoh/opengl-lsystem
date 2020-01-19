@@ -8,26 +8,32 @@
 #include <stdlib.h>
 #include "l-system.h"
 
-void GlSetup_init(void);
+typedef struct {
+  double x;
+  double y;
+  double z;
+} GLPoint;
 
-void GlSetup_display();
+void GLSetup_init(void);
 
-void GlSetup_displayLSystem();
+void GLSetup_display();
 
-void GlSetup_drawLSystem();
+void GLSetup_displayLSystem();
 
-void GlSetup_setMaterial();
+void GLSetup_drawLSystem();
 
-void GlSetup_LSystemCondition(char* start, double angle);
+void GLSetup_setMaterial();
 
-void GlSetup_displayExample(void);
+void GLSetup_LSystemCondition(char* start, double angle);
 
-void GlSetup_reshape(int w, int h);
+void GLSetup_displayExample(void);
 
-void GlSetup_keyboard(unsigned char key, int x, int y);
+void GLSetup_reshape(int w, int h);
 
-void GlSetup_loadTexture(char* filePath);
+void GLSetup_keyboard(unsigned char key, int x, int y);
 
-void GlSetup_run(int argc, char** argv);
+void GLSetup_loadTexture(char* filePath);
+
+void GLSetup_run(int argc, char** argv);
 
 #endif
