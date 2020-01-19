@@ -76,8 +76,7 @@ void GlSetup_setMaterial() {
 void GlSetup_LSystemCondition(char* start, double angle) {
   char* final = strdup(start);
   printf("Drawing: %s\n", final);
-
-  GlSetup_setMaterial();
+  GSetup_setMaterial();
   for (int x = 0; x < strlen(final); x++) {
     char curState = final[x];
     if (curState == 'F') {
