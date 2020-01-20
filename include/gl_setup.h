@@ -19,6 +19,8 @@ void runOpenGL(int argc, char** argv);
 void reshapeWindow(int w, int h);
 void loadTexture(char* filePath);
 void initLightSource(void);
+void checkForVectorAndShaderCondition();
+void checkForTextureCondition();
 void setMaterial();
 void render();
 // Controls

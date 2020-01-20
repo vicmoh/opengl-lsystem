@@ -18,10 +18,11 @@ const GLfloat RED[] = {1.0, 0.0, 0.0, 1.0};
 const GLfloat GREEN[] = {0.0, 1.0, 0.0, 1.0};
 const GLfloat WHITE[] = {1.0, 1.0, 1.0, 1.0};
 
-Point GLSetup_camera = {.x = 0, .y = 0, .z = 0};
+Point GLSetup_cameraPos = {.x = 0, .y = 0, .z = 0};
+Point GLSetup_spherePos = {.x = 0, .y = 0, .z = 0};
 
 /* -------------------------------------------------------------------------- */
-/*                              OpenGL functions                              */
+/*                              penGL functions                              */
 /* -------------------------------------------------------------------------- */
 
 void runOpenGL(int argc, char** argv) {
@@ -115,6 +116,36 @@ void initLightSource(void) {
   glEnable(GL_DEPTH_TEST);
 }
 
+void checkForVectorAndShaderCondition() {
+  /* draw surfaces as either smooth or flat shaded */
+  if (GLSetup_smoothShading == 1)
+    glShadeModel(GL_SMOOTH);
+  else
+    glShadeModel(GL_FLAT);
+  /* draw polygons as either solid or outlines */
+  if (GLSetup_lineDrawing == 1)
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  else
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
+void checkForTextureCondition() {
+  /* turn texturing on */
+  if (GLSetup_textures == 1) {
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, GLSetup_textureID[0]);
+    /* if textured, then use GLSetup_white as base colour */
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, WHITE);
+  } else if (GLSetup_textures == 1)
+    glDisable(GL_TEXTURE_2D);
+}
+
+void setStartingPos() {
+  glTranslatef(0, 0, 0);
+  glTranslatef(0.0, 0.0, -7.0);
+  glRotatef(20.0, 1.0, 0.0, 0.0);
+}
+
 void setMaterial() {
   glMaterialf(GL_FRONT, GL_SHININESS, 30.0);
   glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GREEN);
@@ -138,15 +169,15 @@ void keyboardControl(unsigned char key, int x, int y) {
       break;
 
     case 'i':
-      GLSetup_camera.z += 0.1;
+      GLSetup_cameraPos.z += 0.1;
       render();
-      printf("i key is pressed, z=%f.\n", GLSetup_camera.z);
+      printf("i key is pressed, z=%f.\n", GLSetup_cameraPos.z);
       break;
 
     case 'k':
-      GLSetup_camera.z -= 0.1;
+      GLSetup_cameraPos.z -= 0.1;
       render();
-      printf("k key is pressed, z=%f.\n", GLSetup_camera.z);
+      printf("k key is pressed, z=%f.\n", GLSetup_cameraPos.z);
       break;
 
     case '1':  // draw polygons as outlines
@@ -202,7 +233,7 @@ void mouseControl(int button, int state, int x, int y) {
   if (GLUT_LEFT_BUTTON == button) {
     if (SHOW_DEBUG) printf("%s x value is %d.\n", DEBUG, x);
     if (SHOW_DEBUG) printf("%s y value is %d.\n", DEBUG, y);
-    GLSetup_camera.z = y;
+    GLSetup_cameraPos.z = y;
   }
 }
 
@@ -217,9 +248,7 @@ void drawLSystem() {
                             atof(FileReader_getLineAt(fr, 0)));
   /* set starting location of objects */
   glPushMatrix();
-  glTranslatef(0, 0, 0);
-  glTranslatef(0.0, 0.0, -7.0);
-  glRotatef(20.0, 1.0, 0.0, 0.0);
+  setStartingPos();
   drawLSystemFromCondition(ls->final, ls->angle);
   glPopMatrix();
   // Free
@@ -240,20 +269,20 @@ void drawLSystemFromCondition(char* start, double angle) {
       if (SHOW_DEBUG)
         printf("Rotate z axis by %f degrees to the right.\n", angle);
       glRotatef(angle, 0, 0, 1);
-      glTranslatef(0, 0.2, 0 + GLSetup_camera.z);
+      glTranslatef(0, 0.2, 0 + GLSetup_cameraPos.z);
     } else if (curState == '-') {
       if (SHOW_DEBUG)
         printf("Rotate z axis by %f degrees to the left.\n", angle);
       glRotatef(-angle, 0, 0, 1);
-      glTranslatef(0, 0.2, 0 + GLSetup_camera.z);
+      glTranslatef(0, 0.2, 0 + GLSetup_cameraPos.z);
     } else if (curState == '[') {
       if (SHOW_DEBUG) printf("Push matrix.\n");
       glPushMatrix();
-      glTranslatef(0, 0.2, 0 + GLSetup_camera.z);
+      glTranslatef(0, 0.2, 0 + GLSetup_cameraPos.z);
     } else if (curState == ']') {
       if (SHOW_DEBUG) printf("Pop matrix.\n");
       glPopMatrix();
-      glTranslatef(0, 0.2, 0 + GLSetup_camera.z);
+      glTranslatef(0, 0.2, 0 + GLSetup_cameraPos.z);
     }
   }
   free(final);
@@ -261,26 +290,10 @@ void drawLSystemFromCondition(char* start, double angle) {
 
 void displayLSystem() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  /* draw surfaces as either smooth or flat shaded */
-  if (GLSetup_smoothShading == 1)
-    glShadeModel(GL_SMOOTH);
-  else
-    glShadeModel(GL_FLAT);
-  /* draw polygons as either solid or outlines */
-  if (GLSetup_lineDrawing == 1)
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  else
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  checkForVectorAndShaderCondition();
 
   drawLSystem();
 
-  /* turn texturing on */
-  if (GLSetup_textures == 1) {
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, GLSetup_textureID[0]);
-    /* if textured, then use GLSetup_white as base colour */
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, WHITE);
-  } else if (GLSetup_textures == 1)
-    glDisable(GL_TEXTURE_2D);
+  checkForVectorAndShaderCondition();
   glFlush();
 }
