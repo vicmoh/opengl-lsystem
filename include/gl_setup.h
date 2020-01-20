@@ -12,28 +12,21 @@ typedef struct {
   double x;
   double y;
   double z;
-} GLPoint;
+} Point;
 
-void init(void);
-
-void redraw();
-
-void displayLSystem();
-
-void drawLSystem();
-
-void setMaterial();
-
-void drawLSystemFromCondition(char* start, double angle);
-
-void reshape(int w, int h);
-
-void keyboardControl(unsigned char key, int x, int y);
-
-void loadTexture(char* filePath);
-
-void mouseControl(int button, int state, int x, int y);
-
+// Open GL setups
 void runOpenGL(int argc, char** argv);
+void reshapeWindow(int w, int h);
+void loadTexture(char* filePath);
+void initLightSource(void);
+void setMaterial();
+void render();
+// Controls
+void keyboardControl(unsigned char key, int x, int y);
+void mouseControl(int button, int state, int x, int y);
+// Draw l-system
+void displayLSystem();
+void drawLSystem();
+void drawLSystemFromCondition(char* start, double angle);
 
 #endif

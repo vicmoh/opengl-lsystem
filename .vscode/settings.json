@@ -7,7 +7,10 @@
         "typeinfo": "c",
         "l-system.h": "c",
         "gl_setup.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "unordered_map": "c",
+        "fstream": "c",
+        "sstream": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }
