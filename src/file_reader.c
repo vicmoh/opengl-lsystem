@@ -39,6 +39,13 @@ FileReader* new_FileReader(char* fileName) {
   return this;
 }
 
+void free_FileReader(FileReader* this) {
+  if (this == NULL) return;
+  for (int x = 0; x < this->length; x++) free(this->line[x]);
+  free(this->line);
+  free(this);
+}
+
 int FileReader_getLength(FileReader* this) {
   if (this == NULL) return 0;
   return this->length;
@@ -64,9 +71,3 @@ void FileReader_print(FileReader* this) {
   for (int x = 0; x < this->length; x++) printf("%s\n", this->line[x]);
 }
 
-void free_FileReader(FileReader* this) {
-  if (this == NULL) return;
-  for (int x = 0; x < this->length; x++) free(this->line[x]);
-  free(this->line);
-  free(this);
-}

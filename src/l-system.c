@@ -35,6 +35,11 @@ LSystem* new_LSystem(char* start, int depth, double angle) {
   return new;
 }
 
+void free_LSystem(LSystem* this) {
+  if (this != NULL) return;
+  free(this->final);
+}
+
 void LSystem_runTest() {
   printf("Testing LSystem:\n");
   LSystem* ls = new_LSystem("F[+F]", 2, 45);
@@ -52,9 +57,4 @@ LSystem* LSystem_recurse(LSystem* this) {
 void LSystem_print(LSystem* this) {
   printf("{depth: %d, original: %s, final: %s}\n", this->depth, this->original,
          this->final);
-}
-
-void free_LSystem(LSystem* this) {
-  if (this != NULL) return;
-  free(this->final);
 }
