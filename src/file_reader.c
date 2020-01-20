@@ -55,7 +55,7 @@ char* FileReader_getLineAt(FileReader* this, int index) {
   if (this == NULL) return NULL;
   if (index > this->length - 1) return NULL;
   if (index < 0) return NULL;
-  return this->lines;
+  return this->lines[index];
 }
 
 void FileReader_runTest() {

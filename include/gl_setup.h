@@ -14,26 +14,26 @@ typedef struct {
   double z;
 } GLPoint;
 
-void GLSetup_init(void);
+void init(void);
 
-void GLSetup_redraw();
+void redraw();
 
-void GLSetup_displayLSystem();
+void displayLSystem();
 
-void GLSetup_drawLSystem();
+void drawLSystem();
 
-void GLSetup_setMaterial();
+void setMaterial();
 
-void GLSetup_LSystemCondition(char* start, double angle);
+void drawLSystemFromCondition(char* start, double angle);
 
-void GLSetup_reshape(int w, int h);
+void reshape(int w, int h);
 
-void GLSetup_keyboard(unsigned char key, int x, int y);
+void keyboardControl(unsigned char key, int x, int y);
 
-void GLSetup_loadTexture(char* filePath);
+void loadTexture(char* filePath);
 
-void GLSetup_mouseControl(int button, int state, int x, int y);
+void mouseControl(int button, int state, int x, int y);
 
-void GLSetup_run(int argc, char** argv);
+void runOpenGL(int argc, char** argv);
 
 #endif

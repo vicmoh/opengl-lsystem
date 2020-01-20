@@ -10,27 +10,24 @@ int GLSetup_lineDrawing = 1;    // draw polygons as solid or lines
 int GLSetup_lighting = 0;       // use diffuse and specular lighting
 int GLSetup_smoothShading = 0;  // smooth or flat shading
 int GLSetup_textures = 0;
-
 GLuint GLSetup_textureID[1];
 
 // Colors
-GLfloat GLSetup_blue[] = {0.0, 0.0, 1.0, 1.0};
-GLfloat GLSetup_red[] = {1.0, 0.0, 0.0, 1.0};
-GLfloat GLSetup_green[] = {0.0, 1.0, 0.0, 1.0};
-GLfloat GLSetup_white[] = {1.0, 1.0, 1.0, 1.0};
+const GLfloat BLUE[] = {0.0, 0.0, 1.0, 1.0};
+const GLfloat RED[] = {1.0, 0.0, 0.0, 1.0};
+const GLfloat GREEN[] = {0.0, 1.0, 0.0, 1.0};
+const GLfloat WHITE[] = {1.0, 1.0, 1.0, 1.0};
 
 GLPoint GLSetup_camera = {.x = 0, .y = 0, .z = 0};
 
-/*  Initialize material property and light source.
- */
-void GLSetup_init(void) {
+/*  Initialize material property and light source. */
+void init(void) {
   GLfloat light_ambient[] = {0.0, 0.0, 0.0, 1.0};
   GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
   GLfloat light_specular[] = {1.0, 1.0, 1.0, 1.0};
   GLfloat light_full_off[] = {0.0, 0.0, 0.0, 1.0};
   GLfloat light_full_on[] = {1.0, 1.0, 1.0, 1.0};
   GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};
-
   /* if lighting is turned on then use ambient, diffuse and specular
      lights, otherwise use ambient lighting only */
   if (GLSetup_lighting == 1) {
@@ -43,18 +40,18 @@ void GLSetup_init(void) {
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_full_off);
   }
   glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
+  // Enable the light and depth
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
   glEnable(GL_DEPTH_TEST);
 }
 
-void GLSetup_redraw(void) {
-  GLSetup_init();
-  GLSetup_displayLSystem();
+void redraw(void) {
+  init();
+  displayLSystem();
 }
 
-void GLSetup_drawLSystem() {
+void drawLSystem() {
   FileReader* fr = new_FileReader("./assets/sample1.txt");
   LSystem* ls = new_LSystem(FileReader_getLineAt(fr, 2),
                             atoi(FileReader_getLineAt(fr, 1)),
@@ -64,23 +61,23 @@ void GLSetup_drawLSystem() {
   glTranslatef(0, 0, 0);
   glTranslatef(0.0, 0.0, -7.0);
   glRotatef(20.0, 1.0, 0.0, 0.0);
-  GLSetup_LSystemCondition(ls->final, ls->angle);
+  drawLSystemFromCondition(ls->final, ls->angle);
   glPopMatrix();
   // Free
   free_LSystem(ls);
 }
 
-void GLSetup_setMaterial() {
+void setMaterial() {
   glMaterialf(GL_FRONT, GL_SHININESS, 30.0);
-  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_green);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, GLSetup_white);
+  glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GREEN);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, WHITE);
 }
 
-void GLSetup_LSystemCondition(char* start, double angle) {
+void drawLSystemFromCondition(char* start, double angle) {
   const bool SHOW_DEBUG = false;
   char* final = strdup(start);
   if (SHOW_DEBUG) printf("Drawing: %s\n", final);
-  GLSetup_setMaterial();
+  setMaterial();
   for (int x = 0; x < strlen(final); x++) {
     char curState = final[x];
     if (curState == 'F') {
@@ -109,7 +106,7 @@ void GLSetup_LSystemCondition(char* start, double angle) {
   free(final);
 }
 
-void GLSetup_displayLSystem() {
+void displayLSystem() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   /* draw surfaces as either smooth or flat shaded */
   if (GLSetup_smoothShading == 1)
@@ -122,20 +119,20 @@ void GLSetup_displayLSystem() {
   else
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-  GLSetup_drawLSystem();
+  drawLSystem();
 
   /* turn texturing on */
   if (GLSetup_textures == 1) {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, GLSetup_textureID[0]);
     /* if textured, then use GLSetup_white as base colour */
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GLSetup_white);
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, WHITE);
   } else if (GLSetup_textures == 1)
     glDisable(GL_TEXTURE_2D);
   glFlush();
 }
 
-void GLSetup_reshape(int w, int h) {
+void reshape(int w, int h) {
   glViewport(0, 0, (GLsizei)w, (GLsizei)h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -144,7 +141,7 @@ void GLSetup_reshape(int w, int h) {
   glLoadIdentity();
 }
 
-void GLSetup_keyboard(unsigned char key, int x, int y) {
+void keyboardControl(unsigned char key, int x, int y) {
   switch (key) {
     case 27:
     case 'q':
@@ -153,13 +150,13 @@ void GLSetup_keyboard(unsigned char key, int x, int y) {
 
     case 'i':
       GLSetup_camera.z += 0.1;
-      GLSetup_redraw();
+      redraw();
       printf("i key is pressed, z=%f.\n", GLSetup_camera.z);
       break;
 
     case 'k':
       GLSetup_camera.z -= 0.1;
-      GLSetup_redraw();
+      redraw();
       printf("k key is pressed, z=%f.\n", GLSetup_camera.z);
       break;
 
@@ -168,7 +165,7 @@ void GLSetup_keyboard(unsigned char key, int x, int y) {
       GLSetup_lighting = 0;
       GLSetup_smoothShading = 0;
       GLSetup_textures = 0;
-      GLSetup_redraw();
+      redraw();
       printf("1 is clicked.\n");
       break;
 
@@ -177,7 +174,7 @@ void GLSetup_keyboard(unsigned char key, int x, int y) {
       GLSetup_lighting = 0;
       GLSetup_smoothShading = 0;
       GLSetup_textures = 0;
-      GLSetup_redraw();
+      redraw();
       printf("2 is clicked.\n");
       break;
 
@@ -186,7 +183,7 @@ void GLSetup_keyboard(unsigned char key, int x, int y) {
       GLSetup_lighting = 1;
       GLSetup_smoothShading = 0;
       GLSetup_textures = 0;
-      GLSetup_redraw();
+      redraw();
       printf("3 is clicked.\n");
       break;
 
@@ -195,7 +192,7 @@ void GLSetup_keyboard(unsigned char key, int x, int y) {
       GLSetup_lighting = 1;
       GLSetup_smoothShading = 1;
       GLSetup_textures = 0;
-      GLSetup_redraw();
+      redraw();
       printf("4 is clicked.\n");
       break;
 
@@ -204,13 +201,13 @@ void GLSetup_keyboard(unsigned char key, int x, int y) {
       GLSetup_lighting = 1;
       GLSetup_smoothShading = 1;
       GLSetup_textures = 1;
-      GLSetup_redraw();
+      redraw();
       printf("5 is clicked.\n");
       break;
   }
 }
 
-void GLSetup_loadTexture(char* filePath) {
+void loadTexture(char* filePath) {
   FILE* fp;
   int i, j;
   int GLSetup_red, GLSetup_green, GLSetup_blue;
@@ -247,7 +244,7 @@ void GLSetup_loadTexture(char* filePath) {
   fclose(fp);
 }
 
-void GLSetup_mouseControl(int button, int state, int x, int y) {
+void mouseControl(int button, int state, int x, int y) {
   const bool SHOW_DEBUG = true;
   const char DEBUG[] = "GLSetup_mouseControl():";
   if (GLUT_LEFT_BUTTON == button) {
@@ -257,7 +254,7 @@ void GLSetup_mouseControl(int button, int state, int x, int y) {
   }
 }
 
-void GLSetup_run(int argc, char** argv) {
+void runOpenGL(int argc, char** argv) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowSize(1024, 768);
@@ -265,12 +262,12 @@ void GLSetup_run(int argc, char** argv) {
   printf("Running OpenGL Version: %s\n", glGetString(GL_VERSION));
 
   // Draw
-  GLSetup_init();
-  GLSetup_loadTexture("./assets/image.txt");
-  glutMouseFunc(GLSetup_mouseControl);
-  glutReshapeFunc(GLSetup_reshape);
-  glutDisplayFunc(GLSetup_redraw);
-  glutKeyboardFunc(GLSetup_keyboard);
+  init();
+  loadTexture("./assets/image.txt");
+  glutMouseFunc(mouseControl);
+  glutReshapeFunc(reshape);
+  glutDisplayFunc(redraw);
+  glutKeyboardFunc(keyboardControl);
 
   // Loop
   glutMainLoop();

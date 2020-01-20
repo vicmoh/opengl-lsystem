@@ -10,7 +10,7 @@ const bool _RUN_OPEN_GL = true;
 /**
  * Run the program.
  **/
-void run(int argc, char** argv) { GLSetup_run(argc, argv); }
+void run(int argc, char** argv) { runOpenGL(argc, argv); }
 
 /**
  * Function to be wrap an run.
