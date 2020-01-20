@@ -18,12 +18,13 @@ typedef struct {
 
 LSystem* new_LSystem(char* start, int depth, double angle);
 
+void free_LSystem(LSystem* this);
+
 void LSystem_runTest();
 
 LSystem* LSystem_recurse(LSystem* this);
 
 void LSystem_print(LSystem* this);
 
-void LSystem_free(LSystem* this);
 
 #endif

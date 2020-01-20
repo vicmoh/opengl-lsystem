@@ -40,7 +40,7 @@ void LSystem_runTest() {
   LSystem* ls = new_LSystem("F[+F]", 2, 45);
   printf("ls = ");
   LSystem_print(ls);
-  LSystem_free(ls);
+  free_LSystem(ls);
 }
 
 LSystem* LSystem_recurse(LSystem* this) {
@@ -54,7 +54,7 @@ void LSystem_print(LSystem* this) {
          this->final);
 }
 
-void LSystem_free(LSystem* this) {
+void free_LSystem(LSystem* this) {
   if (this != NULL) return;
   free(this->final);
 }

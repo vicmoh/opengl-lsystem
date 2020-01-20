@@ -39,18 +39,32 @@ FileReader* new_FileReader(char* fileName) {
   return this;
 }
 
+int FileReader_getLength(FileReader* this) {
+  if (this == NULL) return 0;
+  return this->length;
+}
+
+char* FileReader_getLineAt(FileReader* this, int index) {
+  if (this == NULL) return NULL;
+  if (index > this->length - 1) return NULL;
+  if (index < 0) return NULL;
+  char* str = calloc(strlen(this->line[index]) + 2, sizeof(char));
+  strcpy(str, this->line[index]);
+  return str;
+}
+
 void FileReader_runTest() {
   printf("Testing FileReader:\n");
   FileReader* fr = new_FileReader("./assets/sample.txt");
   FileReader_print(fr);
-  FileReader_free(fr);
+  free_FileReader(fr);
 }
 
 void FileReader_print(FileReader* this) {
   for (int x = 0; x < this->length; x++) printf("%s\n", this->line[x]);
 }
 
-void FileReader_free(FileReader* this) {
+void free_FileReader(FileReader* this) {
   if (this == NULL) return;
   for (int x = 0; x < this->length; x++) free(this->line[x]);
   free(this->line);

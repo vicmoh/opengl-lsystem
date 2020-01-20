@@ -56,7 +56,9 @@ void GLSetup_redraw(void) {
 
 void GLSetup_drawLSystem() {
   FileReader* fr = new_FileReader("./assets/sample1.txt");
-  LSystem* ls = new_LSystem(fr->line[2], atoi(fr->line[1]), atof(fr->line[0]));
+  LSystem* ls = new_LSystem(FileReader_getLineAt(fr, 2),
+                            atoi(FileReader_getLineAt(fr, 1)),
+                            atof(FileReader_getLineAt(fr, 0)));
   /* set starting location of objects */
   glPushMatrix();
   glTranslatef(0, 0, 0);
@@ -65,7 +67,7 @@ void GLSetup_drawLSystem() {
   GLSetup_LSystemCondition(ls->final, ls->angle);
   glPopMatrix();
   // Free
-  LSystem_free(ls);
+  free_LSystem(ls);
 }
 
 void GLSetup_setMaterial() {
@@ -150,13 +152,13 @@ void GLSetup_keyboard(unsigned char key, int x, int y) {
       break;
 
     case 'i':
-      GLSetup_camera.z+=0.1;
+      GLSetup_camera.z += 0.1;
       GLSetup_redraw();
       printf("i key is pressed, z=%f.\n", GLSetup_camera.z);
       break;
 
     case 'k':
-      GLSetup_camera.z-=0.1;
+      GLSetup_camera.z -= 0.1;
       GLSetup_redraw();
       printf("k key is pressed, z=%f.\n", GLSetup_camera.z);
       break;

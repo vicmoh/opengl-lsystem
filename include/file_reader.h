@@ -13,10 +13,14 @@ typedef struct {
 
 FileReader* new_FileReader(char* fileName);
 
+void free_FileReader(FileReader* this);
+
+int FileReader_getLength(FileReader* this);
+
+char* FileReader_getLineAt(FileReader* this, int index);
+
 void FileReader_runTest();
 
 void FileReader_print(FileReader* this);
-
-void FileReader_free(FileReader* this);
 
 #endif
