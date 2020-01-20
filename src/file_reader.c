@@ -3,7 +3,7 @@
 FileReader* new_FileReader(char* fileName) {
   FileReader* this = malloc(sizeof(FileReader));
   FILE* filePointer = fopen(fileName, "r");
-  this->line = calloc(1, sizeof(char*));
+  this->lines = calloc(1, sizeof(char*));
   char* stringBuffer = calloc(1, sizeof(char));
   int charBuffer;
   int stringSize = 0;
@@ -25,10 +25,10 @@ FileReader* new_FileReader(char* fileName) {
   // remove the \r\n by tokenizing and adding to array
   char* token = strtok(stringBuffer, "\r\n");
   while (token != NULL) {
-    this->line[lineSize] = calloc(strlen(token), sizeof(char));
-    strcpy(this->line[lineSize], token);
+    this->lines[lineSize] = calloc(strlen(token), sizeof(char));
+    strcpy(this->lines[lineSize], token);
     lineSize++;
-    this->line = realloc(this->line, sizeof(this->line) * (lineSize + 1));
+    this->lines = realloc(this->lines, sizeof(this->lines) * (lineSize + 1));
     token = strtok(NULL, "\r\n");
   }
 
@@ -41,8 +41,8 @@ FileReader* new_FileReader(char* fileName) {
 
 void free_FileReader(FileReader* this) {
   if (this == NULL) return;
-  for (int x = 0; x < this->length; x++) free(this->line[x]);
-  free(this->line);
+  for (int x = 0; x < this->length; x++) free(this->lines[x]);
+  free(this->lines);
   free(this);
 }
 
@@ -55,9 +55,7 @@ char* FileReader_getLineAt(FileReader* this, int index) {
   if (this == NULL) return NULL;
   if (index > this->length - 1) return NULL;
   if (index < 0) return NULL;
-  char* str = calloc(strlen(this->line[index]) + 2, sizeof(char));
-  strcpy(str, this->line[index]);
-  return str;
+  return this->lines;
 }
 
 void FileReader_runTest() {
@@ -68,6 +66,6 @@ void FileReader_runTest() {
 }
 
 void FileReader_print(FileReader* this) {
-  for (int x = 0; x < this->length; x++) printf("%s\n", this->line[x]);
+  for (int x = 0; x < this->length; x++) printf("%s\n", this->lines[x]);
 }
 

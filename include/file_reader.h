@@ -8,7 +8,7 @@
 
 typedef struct {
   int length;
-  char** line;
+  char** lines;
 } FileReader;
 
 FileReader* new_FileReader(char* fileName);
