@@ -3,8 +3,6 @@
 #include "gl_setup.h"
 #include "stdbool.h"
 
-const bool SHOW_EXAMPLE = false;
-
 /* flags used to control the appearance of the image */
 int GLSetup_lineDrawing = 1;    // draw polygons as solid or lines
 int GLSetup_lighting = 0;       // use diffuse and specular lighting
@@ -18,8 +16,8 @@ const GLfloat RED[] = {1.0, 0.0, 0.0, 1.0};
 const GLfloat GREEN[] = {0.0, 1.0, 0.0, 1.0};
 const GLfloat WHITE[] = {1.0, 1.0, 1.0, 1.0};
 
+// Points
 Point GLSetup_cameraPos = {.x = 0, .y = 0, .z = 0};
-Point GLSetup_spherePos = {.x = 0, .y = 0, .z = 0};
 
 /* -------------------------------------------------------------------------- */
 /*                              penGL functions                              */
@@ -154,7 +152,18 @@ void setMaterial() {
 
 void render(void) {
   initLightSource();
-  displayLSystem();
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  checkForVectorAndShaderCondition();
+  glPushMatrix();
+  setMaterial();
+  setStartingPos();
+
+  // Draw...
+  LSystem_draw();
+
+  glPopMatrix();
+  checkForVectorAndShaderCondition();
+  glFlush();
 }
 
 /* -------------------------------------------------------------------------- */
@@ -235,65 +244,4 @@ void mouseControl(int button, int state, int x, int y) {
     if (SHOW_DEBUG) printf("%s y value is %d.\n", DEBUG, y);
     GLSetup_cameraPos.z = y;
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/*                         Draw function for L-System                         */
-/* -------------------------------------------------------------------------- */
-
-void drawLSystem() {
-  FileReader* fr = new_FileReader("./assets/sample1.txt");
-  LSystem* ls = new_LSystem(FileReader_getLineAt(fr, 2),
-                            atoi(FileReader_getLineAt(fr, 1)),
-                            atof(FileReader_getLineAt(fr, 0)));
-  /* set starting location of objects */
-  glPushMatrix();
-  setStartingPos();
-  drawLSystemFromCondition(ls->final, ls->angle);
-  glPopMatrix();
-  // Free
-  free_LSystem(ls);
-}
-
-void drawLSystemFromCondition(char* start, double angle) {
-  const bool SHOW_DEBUG = false;
-  char* final = strdup(start);
-  if (SHOW_DEBUG) printf("Drawing: %s\n", final);
-  setMaterial();
-  for (int x = 0; x < strlen(final); x++) {
-    char curState = final[x];
-    if (curState == 'F') {
-      if (SHOW_DEBUG) printf("Draw solid sphere.\n");
-      glutSolidSphere(0.1, 15, 15);
-    } else if (curState == '+') {
-      if (SHOW_DEBUG)
-        printf("Rotate z axis by %f degrees to the right.\n", angle);
-      glRotatef(angle, 0, 0, 1);
-      glTranslatef(0, 0.2, 0 + GLSetup_cameraPos.z);
-    } else if (curState == '-') {
-      if (SHOW_DEBUG)
-        printf("Rotate z axis by %f degrees to the left.\n", angle);
-      glRotatef(-angle, 0, 0, 1);
-      glTranslatef(0, 0.2, 0 + GLSetup_cameraPos.z);
-    } else if (curState == '[') {
-      if (SHOW_DEBUG) printf("Push matrix.\n");
-      glPushMatrix();
-      glTranslatef(0, 0.2, 0 + GLSetup_cameraPos.z);
-    } else if (curState == ']') {
-      if (SHOW_DEBUG) printf("Pop matrix.\n");
-      glPopMatrix();
-      glTranslatef(0, 0.2, 0 + GLSetup_cameraPos.z);
-    }
-  }
-  free(final);
-}
-
-void displayLSystem() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  checkForVectorAndShaderCondition();
-
-  drawLSystem();
-
-  checkForVectorAndShaderCondition();
-  glFlush();
 }

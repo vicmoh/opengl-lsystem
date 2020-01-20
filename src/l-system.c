@@ -58,3 +58,52 @@ void LSystem_print(LSystem* this) {
   printf("{depth: %d, original: %s, final: %s}\n", this->depth, this->original,
          this->final);
 }
+
+/* -------------------------------------------------------------------------- */
+/*                           Draw L-System functions                          */
+/* -------------------------------------------------------------------------- */
+
+double LSystem_spherePos = 0;
+
+void _LSystem_drawBasedOnCondition(char* start, double angle) {
+  const bool SHOW_DEBUG = false;
+  char* final = strdup(start);
+  if (SHOW_DEBUG) printf("Drawing: %s\n", final);
+  for (int x = 0; x < strlen(final); x++) {
+    char curState = final[x];
+    if (curState == 'F') {
+      if (SHOW_DEBUG) printf("Draw solid sphere.\n");
+      glutSolidSphere(0.1, 15, 15);
+    } else if (curState == '+') {
+      if (SHOW_DEBUG)
+        printf("Rotate z axis by %f degrees to the right.\n", angle);
+      glTranslatef(0, 0.2, 0);
+      glRotatef(angle, 0, 0, 1);
+    } else if (curState == '-') {
+      if (SHOW_DEBUG)
+        printf("Rotate z axis by %f degrees to the left.\n", angle);
+      glTranslatef(0, 0.2, 0);
+      glRotatef(angle, 0, 0, -1);
+    } else if (curState == '[') {
+      if (SHOW_DEBUG) printf("Push matrix.\n");
+      glTranslatef(0, 0.2, 0);
+      glPushMatrix();
+    } else if (curState == ']') {
+      if (SHOW_DEBUG) printf("Pop matrix.\n");
+      glTranslatef(0, 0.2, 0);
+      glPopMatrix();
+    }
+  }
+  free(final);
+}
+
+void LSystem_draw() {
+  FileReader* fr = new_FileReader("./assets/sample1.txt");
+  LSystem* ls = new_LSystem(FileReader_getLineAt(fr, 2),
+                            atoi(FileReader_getLineAt(fr, 1)),
+                            atof(FileReader_getLineAt(fr, 0)));
+  /* set starting location of objects */
+  _LSystem_drawBasedOnCondition(ls->final, ls->angle);
+  // Free
+  free_LSystem(ls);
+}

@@ -21,6 +21,7 @@ void loadTexture(char* filePath);
 void initLightSource(void);
 void checkForVectorAndShaderCondition();
 void checkForTextureCondition();
+void setStartingPos();
 void setMaterial();
 void render();
 // Controls
