@@ -63,34 +63,33 @@ void LSystem_print(LSystem* this) {
 /*                           Draw L-System functions                          */
 /* -------------------------------------------------------------------------- */
 
-double LSystem_spherePos = 0;
-
 void _LSystem_drawBasedOnCondition(char* start, double angle) {
   const bool SHOW_DEBUG = false;
+  double sphere_y = 0;
   char* final = strdup(start);
   if (SHOW_DEBUG) printf("Drawing: %s\n", final);
   for (int x = 0; x < strlen(final); x++) {
     char curState = final[x];
     if (curState == 'F') {
       if (SHOW_DEBUG) printf("Draw solid sphere.\n");
+      glPushMatrix();
+      sphere_y += 0.1;
+      glTranslatef(0, sphere_y, 0);
       glutSolidSphere(0.1, 15, 15);
+      glPopMatrix();
     } else if (curState == '+') {
       if (SHOW_DEBUG)
         printf("Rotate z axis by %f degrees to the right.\n", angle);
-      glTranslatef(0, 0.2, 0);
       glRotatef(angle, 0, 0, 1);
     } else if (curState == '-') {
       if (SHOW_DEBUG)
         printf("Rotate z axis by %f degrees to the left.\n", angle);
-      glTranslatef(0, 0.2, 0);
       glRotatef(angle, 0, 0, -1);
     } else if (curState == '[') {
       if (SHOW_DEBUG) printf("Push matrix.\n");
-      glTranslatef(0, 0.2, 0);
       glPushMatrix();
     } else if (curState == ']') {
       if (SHOW_DEBUG) printf("Pop matrix.\n");
-      glTranslatef(0, 0.2, 0);
       glPopMatrix();
     }
   }
