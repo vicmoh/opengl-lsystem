@@ -92,15 +92,17 @@ void _LSystem_drawBasedOnCondition(char* start, double angle) {
       if (SHOW_DEBUG) printf("Draw solid sphere.\n");
       glPushMatrix();
       sphereY += 1;
-      glTranslatef(0, sphereY, 0);
+      glTranslatef(0, sphereY, -100);
       glutSolidSphere(1, 15, 15);
       glPopMatrix();
     } else if (curState == '+') {
-      if (SHOW_DEBUG) printf("Rotate z axis by %f degrees to the right.\n", angle);
-      glRotatef(angle, 0, 0, -20);
+      if (SHOW_DEBUG)
+        printf("Rotate z axis by %f degrees to the right.\n", angle);
+      glRotatef(angle, 0, 0, 1);
     } else if (curState == '-') {
-      if (SHOW_DEBUG) printf("Rotate z axis by %f degrees to the left.\n", angle);
-      glRotatef(angle, 0, 0, -20);
+      if (SHOW_DEBUG)
+        printf("Rotate z axis by %f degrees to the left.\n", angle);
+      glRotatef(angle, 0, 0, -1);
     } else if (curState == '[') {
       if (SHOW_DEBUG) printf("Push matrix.\n");
       glPushMatrix();
