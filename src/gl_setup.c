@@ -46,7 +46,7 @@ void reshapeWindow(int w, int h) {
   glViewport(0, 0, w, h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(45.0, (GLfloat)w / (GLfloat)h, 1.0, 10.0);
+  gluPerspective(45.0, (GLfloat)w / (GLfloat)h, 1.0, 256.0);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 }
