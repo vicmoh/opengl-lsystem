@@ -93,7 +93,7 @@ void _LSystem_drawBasedOnCondition(char* start, double angle) {
       if (SHOW_DEBUG) printf("Draw solid sphere.\n");
       sphereY += 0.01;
       glTranslatef(0, sphereY, 0);
-      glutSolidSphere(1, 15, 15);
+      glutSolidSphere(5, 15, 15);
     } else if (curState == '+') {
       if (SHOW_DEBUG)
         printf("Rotate z axis by %f degrees to the right.\n", angle);

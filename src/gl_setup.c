@@ -46,7 +46,7 @@ void reshapeWindow(int w, int h) {
   glViewport(0, 0, w, h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(45.0, (GLfloat)w / (GLfloat)h, 1.0, 256.0 * 8);
+  gluPerspective(45.0, (GLfloat)w / (GLfloat)h, 1.0, 256.0 * 64);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 }
@@ -141,7 +141,7 @@ void checkForTextureCondition(void (*draw)(void)) {
 
 void setStartingPos() {
   glTranslatef(0, 0, 0);
-  glTranslatef(0.0, -50, -7.0 + GLSetup_cameraPos.z);
+  glTranslatef(0.0, -100 * 35, -7.0 + GLSetup_cameraPos.z);
   glRotatef(20.0, 1.0, 0.0, 0.0);
 }
 
@@ -159,6 +159,7 @@ void render(void) {
   setMaterial();
   setStartingPos();
 
+  //  Draw the l-system 
   checkForTextureCondition(LSystem_draw);
 
   glPopMatrix();
@@ -177,13 +178,13 @@ void keyboardControl(unsigned char key, int x, int y) {
       break;
 
     case 'i':
-      GLSetup_cameraPos.z += 1;
+      GLSetup_cameraPos.z += 100;
       render();
       printf("i key is pressed, z=%f.\n", GLSetup_cameraPos.z);
       break;
 
     case 'k':
-      GLSetup_cameraPos.z -= 1;
+      GLSetup_cameraPos.z -= 100;
       render();
       printf("k key is pressed, z=%f.\n", GLSetup_cameraPos.z);
       break;
@@ -240,6 +241,6 @@ void mouseControl(int x, int y) {
   const char DEBUG[] = "GLSetup_mouseControl():";
   if (SHOW_DEBUG) printf("%s x value is %d.\n", DEBUG, x);
   if (SHOW_DEBUG) printf("%s y value is %d.\n", DEBUG, y);
-  GLSetup_cameraPos.z = y - 750;
+  GLSetup_cameraPos.z = y - 1000 * 3;
   render();
 }
