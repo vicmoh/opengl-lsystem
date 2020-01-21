@@ -1,46 +1,9 @@
 #include "l-system.h"
 
-LSystem* _LSystem_recurse1(LSystem* this) {
-  for (int i = 0; i < this->depth; i++) {
-    printf("Goal depth: %d, current depth: %d.\n", this->depth, i);
-    printf("String: %s\n.", this->final);
-    for (int x = 0; x < strlen(this->original); x++) {
-      this->final = realloc(
-          this->final,
-          sizeof(char) * (strlen(this->final) + strlen(this->final) + 4));
-      if (this->original[x] == 'F') {
-        sprintf(this->final, "%sF%s", this->final, this->original);
-      } else {
-        sprintf(this->final, "%s%c", this->final, this->original[x]);
-      }
-    }
-  }
-  return this;
-}
-
-LSystem* _LSystem_recurse2(LSystem* this, int depth) {
-  printf("Goal depth: %d, current depth: %d.\n", this->depth, depth);
-  printf("String: %s\n.", this->final);
-
-  if (depth == this->depth) return this;
-  for (int x = 0; x < strlen(this->final); x++) {
-    this->final =
-        realloc(this->final, sizeof(char) * (strlen(this->final) + 4));
-    if (this->original[x] == 'F') {
-      sprintf(this->final, "F%s", this->final);
-    } else {
-      sprintf(this->final, "%s%c", this->final, this->final[x]);
-      return _LSystem_recurse2(this, depth);
-    }
-  }
-  return _LSystem_recurse2(this, ++depth);
-}
-
-char* _LSystem_recurse3(LSystem* this, int depth) {
+char* _LSystem_recurse(LSystem* this, int depth) {
   printf("------------------------------------------------\n");
+  depth++;
   printf("Goal depth: %d, depth: %d.\n", this->depth, depth);
-
-  /// Last depth
   char* toBeReturned = strdup("");
 
   for (int x = 0; x < strlen(this->original); x++) {
@@ -52,10 +15,10 @@ char* _LSystem_recurse3(LSystem* this, int depth) {
             sizeof(char) * (strlen(toBeReturned) + strlen(this->original)) + 4);
         sprintf(toBeReturned, "%sF%s", toBeReturned, this->original);
       } else {
-        char* temp = _LSystem_recurse3(this, ++depth);
-        toBeReturned = realloc(
-            toBeReturned,
-            sizeof(char) * (strlen(toBeReturned) + strlen(temp)) + 4);
+        char* temp = _LSystem_recurse(this, depth);
+        toBeReturned =
+            realloc(toBeReturned,
+                    sizeof(char) * (strlen(toBeReturned) + strlen(temp)) + 4);
         sprintf(toBeReturned, "%sF%s", toBeReturned, temp);
       }
     } else {
@@ -64,7 +27,6 @@ char* _LSystem_recurse3(LSystem* this, int depth) {
           sizeof(char) * (strlen(toBeReturned) + strlen(this->original)) + 4);
       sprintf(toBeReturned, "%s%c", toBeReturned, this->original[x]);
     }
-
     printf("debug: %s\n", toBeReturned);
   }
 
@@ -95,27 +57,7 @@ LSystem* new_LSystem(char* start, int depth, double angle) {
   printf("Angle: %f.\n", angle);
   printf("---------------\n");
 
-  // // Get the process string
-  // for (int i = 0; i < depth; i++) {
-  //   for (int x = 0; x < strlen(new->final); x++) {
-  //     if (new->final[x] == 'F') {
-  //       new->final = realloc(
-  //           new->final,
-  //           sizeof(char) * (strlen(new->final) + strlen(new->original) +
-  //           4));
-  //       sprintf(new->final, "F%s", new->original);
-  //     } else {
-  //       new->final = realloc(
-  //           new->final,
-  //           sizeof(char) * (strlen(new->final) + strlen(new->original) +
-  //           4));
-  //       sprintf(new->final, "%s%c", new->final, new->final[x]);
-  //     }
-  //   }
-  //   printf("DEPTH: %d\n.", i);
-  //   printf("%s\n", new->final);
-  // }
-  new->final = _LSystem_recurse3(new, 0);
+  new->final = _LSystem_recurse(new, 1);
 
   return new;
 }
