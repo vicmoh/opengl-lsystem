@@ -26,7 +26,7 @@ void setMaterial();
 void render();
 // Controls
 void keyboardControl(unsigned char key, int x, int y);
-void mouseControl(int button, int state, int x, int y);
+void mouseControl(int x, int y);
 // Draw l-system
 void displayLSystem();
 void drawLSystem();

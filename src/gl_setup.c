@@ -36,7 +36,7 @@ void runOpenGL(int argc, char** argv) {
   glutReshapeFunc(reshapeWindow);
   glutDisplayFunc(render);
   glutKeyboardFunc(keyboardControl);
-  glutMouseFunc(mouseControl);
+  glutMotionFunc(mouseControl);
 
   // Loop
   glutMainLoop();
@@ -236,12 +236,11 @@ void keyboardControl(unsigned char key, int x, int y) {
   }
 }
 
-void mouseControl(int button, int state, int x, int y) {
-  const bool SHOW_DEBUG = true;
+void mouseControl(int x, int y) {
+  const bool SHOW_DEBUG = false;
   const char DEBUG[] = "GLSetup_mouseControl():";
-  if (GLUT_LEFT_BUTTON == button) {
-    if (SHOW_DEBUG) printf("%s x value is %d.\n", DEBUG, x);
-    if (SHOW_DEBUG) printf("%s y value is %d.\n", DEBUG, y);
-    GLSetup_cameraPos.z = y;
-  }
+  if (SHOW_DEBUG) printf("%s x value is %d.\n", DEBUG, x);
+  if (SHOW_DEBUG) printf("%s y value is %d.\n", DEBUG, y);
+  GLSetup_cameraPos.z = y - 750;
+  render();
 }
