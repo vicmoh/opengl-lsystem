@@ -20,7 +20,7 @@ void reshapeWindow(int w, int h);
 void loadTexture(char* filePath);
 void initLightSource(void);
 void checkForVectorAndShaderCondition();
-void checkForTextureCondition();
+void checkForTextureCondition(void (*draw)(void));
 void setStartingPos();
 void setMaterial();
 void render();

@@ -127,15 +127,16 @@ void checkForVectorAndShaderCondition() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-void checkForTextureCondition() {
+void checkForTextureCondition(void (*draw)(void)) {
   /* turn texturing on */
   if (GLSetup_textures == 1) {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, GLSetup_textureID[0]);
     /* if textured, then use GLSetup_white as base colour */
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, WHITE);
-  } else if (GLSetup_textures == 1)
-    glDisable(GL_TEXTURE_2D);
+  }
+  if (draw != NULL) draw();
+  if (GLSetup_textures == 1) glDisable(GL_TEXTURE_2D);
 }
 
 void setStartingPos() {
@@ -158,11 +159,9 @@ void render(void) {
   setMaterial();
   setStartingPos();
 
-  // Draw...
-  LSystem_draw();
+  checkForTextureCondition(LSystem_draw);
 
   glPopMatrix();
-  checkForVectorAndShaderCondition();
   glFlush();
 }
 
