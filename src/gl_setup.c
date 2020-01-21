@@ -141,7 +141,7 @@ void checkForTextureCondition(void (*draw)(void)) {
 
 void setStartingPos() {
   glTranslatef(0, 0, 0);
-  glTranslatef(0.0, -100 * 35, -7.0 + GLSetup_cameraPos.z);
+  glTranslatef(0.0, 0, -7.0 + GLSetup_cameraPos.z);
   glRotatef(20.0, 1.0, 0.0, 0.0);
 }
 
@@ -159,7 +159,7 @@ void render(void) {
   setMaterial();
   setStartingPos();
 
-  //  Draw the l-system 
+  //  Draw the l-system
   checkForTextureCondition(LSystem_draw);
 
   glPopMatrix();
@@ -237,10 +237,11 @@ void keyboardControl(unsigned char key, int x, int y) {
 }
 
 void mouseControl(int x, int y) {
-  const bool SHOW_DEBUG = false;
+  const bool SHOW_DEBUG = true;
   const char DEBUG[] = "GLSetup_mouseControl():";
+  GLSetup_cameraPos.z = (y * 10) - (1000 * 10);
   if (SHOW_DEBUG) printf("%s x value is %d.\n", DEBUG, x);
   if (SHOW_DEBUG) printf("%s y value is %d.\n", DEBUG, y);
-  GLSetup_cameraPos.z = y - 1000 * 3;
+  if (SHOW_DEBUG) printf("GLSetup_cameraPos.z: %f.\n", GLSetup_cameraPos.z);
   render();
 }
