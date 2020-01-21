@@ -1,13 +1,14 @@
 #include "l-system.h"
 
 char* _LSystem_recurse(LSystem* this, int depth) {
-  printf("------------------------------------------------\n");
+  const bool SHOW_PRINT = false;
+  if (SHOW_PRINT) printf("------------------------------------------------\n");
   depth++;
-  printf("Goal depth: %d, depth: %d.\n", this->depth, depth);
+  if (SHOW_PRINT) printf("Goal depth: %d, depth: %d.\n", this->depth, depth);
   char* toBeReturned = strdup("");
 
   for (int x = 0; x < strlen(this->original); x++) {
-    printf("Char: %c\n", this->original[x]);
+    if (SHOW_PRINT) printf("Char: %c\n", this->original[x]);
     if (this->original[x] == 'F') {
       if (depth >= this->depth) {
         toBeReturned = realloc(
@@ -27,10 +28,10 @@ char* _LSystem_recurse(LSystem* this, int depth) {
           sizeof(char) * (strlen(toBeReturned) + strlen(this->original)) + 4);
       sprintf(toBeReturned, "%s%c", toBeReturned, this->original[x]);
     }
-    printf("debug: %s\n", toBeReturned);
+    if (SHOW_PRINT) printf("debug: %s\n", toBeReturned);
   }
 
-  printf("String: %s\n", toBeReturned);
+  if (SHOW_PRINT) printf("String: %s\n", toBeReturned);
   return toBeReturned;
 }
 
@@ -80,14 +81,8 @@ void LSystem_print(LSystem* this) {
          this->final);
 }
 
-/* --------------------------------------------------------------------------
- */
-/*                           Draw L-System functions */
-/* --------------------------------------------------------------------------
- */
-
 void _LSystem_drawBasedOnCondition(char* start, double angle) {
-  const bool SHOW_DEBUG = true;
+  const bool SHOW_DEBUG = false;
   double sphereY = 0;
   char* final = strdup(start);
   if (SHOW_DEBUG) printf("Drawing: %s\n", final);
@@ -96,18 +91,16 @@ void _LSystem_drawBasedOnCondition(char* start, double angle) {
     if (curState == 'F') {
       if (SHOW_DEBUG) printf("Draw solid sphere.\n");
       glPushMatrix();
-      sphereY += 0.1;
+      sphereY += 1;
       glTranslatef(0, sphereY, 0);
-      glutSolidSphere(0.1, 15, 15);
+      glutSolidSphere(1, 15, 15);
       glPopMatrix();
     } else if (curState == '+') {
-      if (SHOW_DEBUG)
-        printf("Rotate z axis by %f degrees to the right.\n", angle);
-      glRotatef(angle, 0, 0, 1);
+      if (SHOW_DEBUG) printf("Rotate z axis by %f degrees to the right.\n", angle);
+      glRotatef(angle, 0, 0, -20);
     } else if (curState == '-') {
-      if (SHOW_DEBUG)
-        printf("Rotate z axis by %f degrees to the left.\n", angle);
-      glRotatef(angle, 0, 0, -1);
+      if (SHOW_DEBUG) printf("Rotate z axis by %f degrees to the left.\n", angle);
+      glRotatef(angle, 0, 0, -20);
     } else if (curState == '[') {
       if (SHOW_DEBUG) printf("Push matrix.\n");
       glPushMatrix();
