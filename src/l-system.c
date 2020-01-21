@@ -65,7 +65,7 @@ void LSystem_print(LSystem* this) {
 
 void _LSystem_drawBasedOnCondition(char* start, double angle) {
   const bool SHOW_DEBUG = false;
-  double sphere_y = 0;
+  double sphereY = 0;
   char* final = strdup(start);
   if (SHOW_DEBUG) printf("Drawing: %s\n", final);
   for (int x = 0; x < strlen(final); x++) {
@@ -73,8 +73,8 @@ void _LSystem_drawBasedOnCondition(char* start, double angle) {
     if (curState == 'F') {
       if (SHOW_DEBUG) printf("Draw solid sphere.\n");
       glPushMatrix();
-      sphere_y += 0.1;
-      glTranslatef(0, sphere_y, 0);
+      sphereY += 0.1;
+      glTranslatef(0, sphereY, 0);
       glutSolidSphere(0.1, 15, 15);
       glPopMatrix();
     } else if (curState == '+') {
