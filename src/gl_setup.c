@@ -46,7 +46,7 @@ void reshapeWindow(int w, int h) {
   glViewport(0, 0, w, h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(45.0, (GLfloat)w / (GLfloat)h, 1.0, 256.0);
+  gluPerspective(45.0, (GLfloat)w / (GLfloat)h, 1.0, 256.0 * 8);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 }
@@ -178,13 +178,13 @@ void keyboardControl(unsigned char key, int x, int y) {
       break;
 
     case 'i':
-      GLSetup_cameraPos.z += 0.1;
+      GLSetup_cameraPos.z += 1;
       render();
       printf("i key is pressed, z=%f.\n", GLSetup_cameraPos.z);
       break;
 
     case 'k':
-      GLSetup_cameraPos.z -= 0.1;
+      GLSetup_cameraPos.z -= 1;
       render();
       printf("k key is pressed, z=%f.\n", GLSetup_cameraPos.z);
       break;
