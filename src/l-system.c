@@ -1,5 +1,77 @@
 #include "l-system.h"
 
+LSystem* _LSystem_recurse1(LSystem* this) {
+  for (int i = 0; i < this->depth; i++) {
+    printf("Goal depth: %d, current depth: %d.\n", this->depth, i);
+    printf("String: %s\n.", this->final);
+    for (int x = 0; x < strlen(this->original); x++) {
+      this->final = realloc(
+          this->final,
+          sizeof(char) * (strlen(this->final) + strlen(this->final) + 4));
+      if (this->original[x] == 'F') {
+        sprintf(this->final, "%sF%s", this->final, this->original);
+      } else {
+        sprintf(this->final, "%s%c", this->final, this->original[x]);
+      }
+    }
+  }
+  return this;
+}
+
+LSystem* _LSystem_recurse2(LSystem* this, int depth) {
+  printf("Goal depth: %d, current depth: %d.\n", this->depth, depth);
+  printf("String: %s\n.", this->final);
+
+  if (depth == this->depth) return this;
+  for (int x = 0; x < strlen(this->final); x++) {
+    this->final =
+        realloc(this->final, sizeof(char) * (strlen(this->final) + 4));
+    if (this->original[x] == 'F') {
+      sprintf(this->final, "F%s", this->final);
+    } else {
+      sprintf(this->final, "%s%c", this->final, this->final[x]);
+      return _LSystem_recurse2(this, depth);
+    }
+  }
+  return _LSystem_recurse2(this, ++depth);
+}
+
+char* _LSystem_recurse3(LSystem* this, int depth) {
+  printf("------------------------------------------------\n");
+  printf("Goal depth: %d, depth: %d.\n", this->depth, depth);
+
+  /// Last depth
+  char* toBeReturned = strdup("");
+
+  for (int x = 0; x < strlen(this->original); x++) {
+    printf("Char: %c\n", this->original[x]);
+    if (this->original[x] == 'F') {
+      if (depth >= this->depth) {
+        toBeReturned = realloc(
+            toBeReturned,
+            sizeof(char) * (strlen(toBeReturned) + strlen(this->original)) + 4);
+        sprintf(toBeReturned, "%sF%s", toBeReturned, this->original);
+      } else {
+        char* temp = _LSystem_recurse3(this, ++depth);
+        toBeReturned = realloc(
+            toBeReturned,
+            sizeof(char) * (strlen(toBeReturned) + strlen(temp)) + 4);
+        sprintf(toBeReturned, "%sF%s", toBeReturned, temp);
+      }
+    } else {
+      toBeReturned = realloc(
+          toBeReturned,
+          sizeof(char) * (strlen(toBeReturned) + strlen(this->original)) + 4);
+      sprintf(toBeReturned, "%s%c", toBeReturned, this->original[x]);
+    }
+
+    printf("debug: %s\n", toBeReturned);
+  }
+
+  printf("String: %s\n", toBeReturned);
+  return toBeReturned;
+}
+
 LSystem* new_LSystem(char* start, int depth, double angle) {
   if (start == NULL) return NULL;
   const int MAX_MEM = 256 * 8;
@@ -10,28 +82,41 @@ LSystem* new_LSystem(char* start, int depth, double angle) {
 
   // Initialize
   LSystem* new = malloc(sizeof(LSystem));
-  new->depth = 0;
+  new->depth = depth;
   new->angle = angle;
   new->final = calloc(MAX_MEM, sizeof(char));
-  strcpy(new->final, "");
   new->original = calloc(MAX_MEM, sizeof(char));
   strcpy(new->original, start);
+  strcpy(new->final, start);
 
-  // Get the process string
-  for (int i = 0; i < depth - 1; i++) {
-    for (int x = 0; x < strlen(new->original); x++)
-      if (new->original[x] == 'F') {
-        new->final = realloc(
-            new->final,
-            sizeof(char) * (strlen(new->final) + strlen(new->original) + 4));
-        sprintf(new->final, "%sF%s", new->final, new->original);
-      } else {
-        new->final = realloc(
-            new->final,
-            sizeof(char) * (strlen(new->final) + strlen(new->original) + 4));
-        sprintf(new->final, "%s%c", new->final, new->original[x]);
-      }
-  }
+  printf("-----Input-----\n");
+  printf("Start: %s.\n", start);
+  printf("Depth: %d.\n", depth);
+  printf("Angle: %f.\n", angle);
+  printf("---------------\n");
+
+  // // Get the process string
+  // for (int i = 0; i < depth; i++) {
+  //   for (int x = 0; x < strlen(new->final); x++) {
+  //     if (new->final[x] == 'F') {
+  //       new->final = realloc(
+  //           new->final,
+  //           sizeof(char) * (strlen(new->final) + strlen(new->original) +
+  //           4));
+  //       sprintf(new->final, "F%s", new->original);
+  //     } else {
+  //       new->final = realloc(
+  //           new->final,
+  //           sizeof(char) * (strlen(new->final) + strlen(new->original) +
+  //           4));
+  //       sprintf(new->final, "%s%c", new->final, new->final[x]);
+  //     }
+  //   }
+  //   printf("DEPTH: %d\n.", i);
+  //   printf("%s\n", new->final);
+  // }
+  new->final = _LSystem_recurse3(new, 0);
+
   return new;
 }
 
@@ -48,23 +133,19 @@ void LSystem_runTest() {
   free_LSystem(ls);
 }
 
-LSystem* LSystem_recurse(LSystem* this) {
-  (this->depth)++;
-  this = LSystem_recurse(this);
-  return this;
-}
-
 void LSystem_print(LSystem* this) {
   printf("{depth: %d, original: %s, final: %s}\n", this->depth, this->original,
          this->final);
 }
 
-/* -------------------------------------------------------------------------- */
-/*                           Draw L-System functions                          */
-/* -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+ */
+/*                           Draw L-System functions */
+/* --------------------------------------------------------------------------
+ */
 
 void _LSystem_drawBasedOnCondition(char* start, double angle) {
-  const bool SHOW_DEBUG = false;
+  const bool SHOW_DEBUG = true;
   double sphereY = 0;
   char* final = strdup(start);
   if (SHOW_DEBUG) printf("Drawing: %s\n", final);
@@ -99,8 +180,8 @@ void _LSystem_drawBasedOnCondition(char* start, double angle) {
 void LSystem_draw() {
   FileReader* fr = new_FileReader("./assets/sample1.txt");
   LSystem* ls = new_LSystem(FileReader_getLineAt(fr, 2),
-                            atoi(FileReader_getLineAt(fr, 1)),
-                            atof(FileReader_getLineAt(fr, 0)));
+                            atoi(FileReader_getLineAt(fr, 0)),
+                            atof(FileReader_getLineAt(fr, 1)));
   /* set starting location of objects */
   _LSystem_drawBasedOnCondition(ls->final, ls->angle);
   // Free
