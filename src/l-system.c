@@ -91,17 +91,17 @@ void _LSystem_drawBasedOnCondition(char* start, double angle) {
     char curState = final[x];
     if (curState == 'F') {
       if (SHOW_DEBUG) printf("Draw solid sphere.\n");
-      sphereY += 0.005;
+      sphereY += 0.009;
       glTranslatef(0, sphereY, 0);
       glutSolidSphere(10, 15, 15);
     } else if (curState == '+') {
       if (SHOW_DEBUG)
         printf("Rotate z axis by %f degrees to the right.\n", angle);
-      glRotatef(angle, 0, 0, 1);
+      glRotatef(-angle, 0, 0, -7);
     } else if (curState == '-') {
       if (SHOW_DEBUG)
         printf("Rotate z axis by %f degrees to the left.\n", angle);
-      glRotatef(angle, 0, 0, -1);
+      glRotatef(angle, 0, 0, -7);
     } else if (curState == '[') {
       if (SHOW_DEBUG) printf("Push matrix.\n");
       glPushMatrix();
@@ -115,7 +115,7 @@ void _LSystem_drawBasedOnCondition(char* start, double angle) {
 }
 
 void LSystem_draw() {
-  FileReader* fr = new_FileReader("./assets/sample1.txt");
+  FileReader* fr = new_FileReader("./assets/sample3.txt");
   LSystem* ls = new_LSystem(FileReader_getLineAt(fr, 2),
                             atoi(FileReader_getLineAt(fr, 0)),
                             atof(FileReader_getLineAt(fr, 1)));
