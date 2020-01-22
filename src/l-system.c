@@ -1,5 +1,7 @@
 #include "l-system.h"
 
+char* LSystem_globalFileName = NULL;
+
 char* _LSystem_recurse(LSystem* this, int depth) {
   const bool SHOW_PRINT = false;
   if (SHOW_PRINT) printf("------------------------------------------------\n");
@@ -112,8 +114,20 @@ void _LSystem_drawBasedOnCondition(char* start, double angle) {
   free(final);
 }
 
+void LSystem_freeGlobalFileName() {
+  if (LSystem_globalFileName != NULL) free(LSystem_globalFileName);
+}
+
+void LSystem_setGlobalFileName(char* fileName) {
+  if (fileName == NULL) return;
+  LSystem_globalFileName = calloc(strlen(fileName) + 4, sizeof(char));
+  strcpy(LSystem_globalFileName, fileName);
+}
+
 void LSystem_draw() {
-  FileReader* fr = new_FileReader("./assets/sample1.txt");
+  if (LSystem_globalFileName == NULL) return;
+  printf("File: %s\n", LSystem_globalFileName);
+  FileReader* fr = new_FileReader(LSystem_globalFileName);
   LSystem* ls = new_LSystem(FileReader_getLineAt(fr, 2),
                             atoi(FileReader_getLineAt(fr, 0)),
                             atof(FileReader_getLineAt(fr, 1)));

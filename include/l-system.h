@@ -23,6 +23,8 @@ void LSystem_runTest();
 void LSystem_print(LSystem* this);
 
 // Draw LSystem functions
+void LSystem_freeGlobalFileName();
+void LSystem_setGlobalFileName(char* fileName);
 void LSystem_draw();
 
 #endif

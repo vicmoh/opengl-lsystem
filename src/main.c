@@ -4,7 +4,7 @@
 #include "l-system.h"
 
 // Run setup.
-const bool _RUN_TEST = true;
+const bool _RUN_TEST = false;
 const bool _RUN_OPEN_GL = true;
 
 /**

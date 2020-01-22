@@ -24,6 +24,16 @@ Point GLSetup_cameraPos = {.x = 0, .y = 0, .z = 0};
 /* -------------------------------------------------------------------------- */
 
 void runOpenGL(int argc, char** argv) {
+  if (argc == 0) {
+    printf("NO ARGUMENT FOUND! PLEASE SPECIFY ARGUMENT.\n");
+    return;
+  }
+  if (argv[1] == NULL) {
+    printf("NO ARGUMENT FOUND! PLEASE SPECIFY ARGUMENT.\n");
+    return;
+  }
+  printf("Running with file: %s\n", argv[1]);
+  LSystem_setGlobalFileName(argv[1]);
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowSize(1024, 768);
@@ -40,6 +50,7 @@ void runOpenGL(int argc, char** argv) {
 
   // Loop
   glutMainLoop();
+  LSystem_freeGlobalFileName();
 }
 
 void reshapeWindow(int w, int h) {
@@ -237,7 +248,7 @@ void keyboardControl(unsigned char key, int x, int y) {
 }
 
 void mouseControl(int x, int y) {
-  const bool SHOW_DEBUG = true;
+  const bool SHOW_DEBUG = false;
   const char DEBUG[] = "GLSetup_mouseControl():";
   GLSetup_cameraPos.z = (y * 10) - (1000 * 10);
   if (SHOW_DEBUG) printf("%s x value is %d.\n", DEBUG, x);

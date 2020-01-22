@@ -12,11 +12,11 @@ CC = gcc
 FLAGS = -Wall -pedantic -std=c11 -Iinclude
 m = [AUTO]
 
-all: compile
-	./bin/run
+run: compile
+	./run $(file)
 
 compile:
-	$(CC) $(FLAGS) $(SRC)*.c -o $(BIN)run $(INCLUDES) $(TARGET)
+	$(CC) $(FLAGS) $(SRC)*.c -o run $(INCLUDES) $(TARGET)
 
 git:
 	git add -A
@@ -24,4 +24,4 @@ git:
 	git push
 
 clean:
-	rm $(BIN)*.o $(BIN)*.so
+	rm $(BIN)*.o $(BIN)*.so run
