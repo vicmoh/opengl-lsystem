@@ -164,12 +164,12 @@ void setMaterial() {
 void render(void) {
   initLightSource();
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  checkForVectorAndShaderCondition();
   glPushMatrix();
   setMaterial();
   setStartingPos();
 
   //  Draw the l-system
+  checkForVectorAndShaderCondition();
   checkForTextureCondition(LSystem_draw);
   glPopMatrix();
   glFlush();
