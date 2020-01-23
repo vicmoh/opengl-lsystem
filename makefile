@@ -13,7 +13,7 @@ FLAGS = -Wall -pedantic -std=c11 -Iinclude
 m = [AUTO]
 
 run: compile
-	./run $(file)
+	./run $(FILE)
 
 compile:
 	$(CC) $(FLAGS) $(SRC)*.c -o run $(INCLUDES) $(TARGET)
