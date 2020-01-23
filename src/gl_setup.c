@@ -46,6 +46,7 @@ void runOpenGL(int argc, char** argv) {
   glutReshapeFunc(reshapeWindow);
   glutDisplayFunc(render);
   glutKeyboardFunc(keyboardControl);
+  glutSpecialFunc(specialControl);
   glutMotionFunc(mouseControl);
 
   // Loop
@@ -151,8 +152,8 @@ void checkForTextureCondition(void (*draw)(void)) {
 }
 
 void setStartingPos() {
-  glTranslatef(0, 0, 0);
-  glTranslatef(0.0, 0, -7.0 + GLSetup_cameraPos.z);
+  glTranslatef(0 + GLSetup_cameraPos.x, 0 + GLSetup_cameraPos.y,
+               -7.0 + GLSetup_cameraPos.z);
   glRotatef(20.0, 1.0, 0.0, 0.0);
 }
 
@@ -172,78 +173,79 @@ void render(void) {
 
   //  Draw the l-system
   checkForTextureCondition(LSystem_draw);
-
   glPopMatrix();
   glFlush();
 }
 
-/* -------------------------------------------------------------------------- */
-/*                             Function controller                            */
-/* -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+ */
+/*                             Function controller */
+/* --------------------------------------------------------------------------
+ */
+
+void specialControl(int key, int x, int y) {
+  const double CAMERA_MOVEMENT = 25;
+  if (key == 'q' || key == 27) {
+    exit(0);
+  } else if (key == 'i') {
+    GLSetup_cameraPos.z += CAMERA_MOVEMENT;
+    render();
+    printf("i key is pressed, z=%f.\n", GLSetup_cameraPos.z);
+  } else if (key == 'w' || key == GLUT_KEY_UP) {
+    GLSetup_cameraPos.y += CAMERA_MOVEMENT;
+    render();
+    printf("w key is pressed, y=%f.\n", GLSetup_cameraPos.y);
+  } else if (key == 's' || key == GLUT_KEY_DOWN) {
+    GLSetup_cameraPos.y -= CAMERA_MOVEMENT;
+    render();
+    printf("s key is pressed, y=%f.\n", GLSetup_cameraPos.y);
+  } else if (key == 'a' || key == GLUT_KEY_LEFT) {
+    GLSetup_cameraPos.x -= CAMERA_MOVEMENT;
+    render();
+    printf("a key is pressed, x=%f.\n", GLSetup_cameraPos.x);
+  } else if (key == 'd' || key == GLUT_KEY_RIGHT) {
+    GLSetup_cameraPos.x += CAMERA_MOVEMENT;
+    render();
+    printf("d key is pressed, x=%f.\n", GLSetup_cameraPos.x);
+  }
+}
 
 void keyboardControl(unsigned char key, int x, int y) {
-  switch (key) {
-    case 27:
-    case 'q':
-      exit(0);
-      break;
-
-    case 'i':
-      GLSetup_cameraPos.z += 100;
-      render();
-      printf("i key is pressed, z=%f.\n", GLSetup_cameraPos.z);
-      break;
-
-    case 'k':
-      GLSetup_cameraPos.z -= 100;
-      render();
-      printf("k key is pressed, z=%f.\n", GLSetup_cameraPos.z);
-      break;
-
-    case '1':  // draw polygons as outlines
-      GLSetup_lineDrawing = 1;
-      GLSetup_lighting = 0;
-      GLSetup_smoothShading = 0;
-      GLSetup_textures = 0;
-      render();
-      printf("1 is clicked.\n");
-      break;
-
-    case '2':  // draw polygons as filled
-      GLSetup_lineDrawing = 0;
-      GLSetup_lighting = 0;
-      GLSetup_smoothShading = 0;
-      GLSetup_textures = 0;
-      render();
-      printf("2 is clicked.\n");
-      break;
-
-    case '3':  // diffuse and specular lighting, flat shading
-      GLSetup_lineDrawing = 0;
-      GLSetup_lighting = 1;
-      GLSetup_smoothShading = 0;
-      GLSetup_textures = 0;
-      render();
-      printf("3 is clicked.\n");
-      break;
-
-    case '4':  // diffuse and specular lighting, smooth shading
-      GLSetup_lineDrawing = 0;
-      GLSetup_lighting = 1;
-      GLSetup_smoothShading = 1;
-      GLSetup_textures = 0;
-      render();
-      printf("4 is clicked.\n");
-      break;
-
-    case '5':  // texture with  smooth shading
-      GLSetup_lineDrawing = 0;
-      GLSetup_lighting = 1;
-      GLSetup_smoothShading = 1;
-      GLSetup_textures = 1;
-      render();
-      printf("5 is clicked.\n");
-      break;
+  if (key == '1') {  // draw polygons as outlines
+    GLSetup_lineDrawing = 1;
+    GLSetup_lighting = 0;
+    GLSetup_smoothShading = 0;
+    GLSetup_textures = 0;
+    render();
+    printf("1 is clicked.\n");
+  } else if (key == '2') {  // draw polygons as filled
+    GLSetup_lineDrawing = 0;
+    GLSetup_lighting = 0;
+    GLSetup_smoothShading = 0;
+    GLSetup_textures = 0;
+    render();
+    printf("2 is clicked.\n");
+  } else if (key == '3') {  // diffuse and specular lighting, flat shading
+    GLSetup_lineDrawing = 0;
+    GLSetup_lighting = 1;
+    GLSetup_smoothShading = 0;
+    GLSetup_textures = 0;
+    render();
+    printf("3 is clicked.\n");
+  } else if (key == '4') {  // diffuse and specular lighting, smooth shading
+    GLSetup_lineDrawing = 0;
+    GLSetup_lighting = 1;
+    GLSetup_smoothShading = 1;
+    GLSetup_textures = 0;
+    render();
+    printf("4 is clicked.\n");
+  } else if (key == '5') {  // texture with  smooth shading
+    GLSetup_lineDrawing = 0;
+    GLSetup_lighting = 1;
+    GLSetup_smoothShading = 1;
+    GLSetup_textures = 1;
+    render();
+    printf("5 is clicked.\n");
   }
 }
 

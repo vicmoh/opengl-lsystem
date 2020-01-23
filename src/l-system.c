@@ -38,6 +38,7 @@ char* _LSystem_recurse(LSystem* this, int depth) {
 }
 
 LSystem* new_LSystem(char* start, int depth, double angle) {
+  const bool SHOW_DEBUG = true;
   if (start == NULL) return NULL;
   const int MAX_MEM = 256 * 8;
   if (MAX_MEM < strlen(start)) {
@@ -54,14 +55,16 @@ LSystem* new_LSystem(char* start, int depth, double angle) {
   strcpy(new->original, start);
   strcpy(new->final, start);
 
-  printf("-----Input-----\n");
-  printf("Start: %s.\n", start);
-  printf("Depth: %d.\n", depth);
-  printf("Angle: %f.\n", angle);
-  printf("---------------\n");
+  if (SHOW_DEBUG) {
+    printf("-----Input-----\n");
+    printf("Start: %s.\n", start);
+    printf("Depth: %d.\n", depth);
+    printf("Angle: %f.\n", angle);
+    printf("---------------\n");
+  }
 
   new->final = _LSystem_recurse(new, 1);
-
+  if (SHOW_DEBUG) printf("L-System string: %s\n", new->final);
   return new;
 }
 
@@ -126,8 +129,12 @@ void LSystem_setGlobalFileName(char* fileName) {
 
 void LSystem_draw() {
   if (LSystem_globalFileName == NULL) return;
-  printf("File: %s\n", LSystem_globalFileName);
+  printf("\n\n\n\n\n\n\n\n\n\nFile: %s\n", LSystem_globalFileName);
   FileReader* fr = new_FileReader(LSystem_globalFileName);
+  if (fr == NULL) {
+    printf("Could not find the file. Please re-enter the file.\n");
+    return;
+  }
   LSystem* ls = new_LSystem(FileReader_getLineAt(fr, 2),
                             atoi(FileReader_getLineAt(fr, 0)),
                             atof(FileReader_getLineAt(fr, 1)));

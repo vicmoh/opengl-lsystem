@@ -10,7 +10,21 @@ const bool _RUN_OPEN_GL = true;
 /**
  * Run the program.
  **/
-void run(int argc, char** argv) { runOpenGL(argc, argv); }
+void run(int argc, char** argv) {
+  if (argc == 0 || argv[1] == NULL) {
+    printf(
+        "NO ARGUMENT FOUND! PLEASE SPECIFY ARGUMENT. Please read the README "
+        "provided for more information.\n");
+    return;
+  }
+  FileReader* fr = new_FileReader(argv[1]);
+  if (fr == NULL) {
+    printf("Could not find the file. Please re-enter the FILE argument.\n");
+    return;
+  } else
+    free_FileReader(fr);
+  runOpenGL(argc, argv);
+}
 
 /**
  * Function to be wrap an run.

@@ -1,8 +1,10 @@
 #include "file_reader.h"
 
 FileReader* new_FileReader(char* fileName) {
-  FileReader* this = malloc(sizeof(FileReader));
   FILE* filePointer = fopen(fileName, "r");
+  if (filePointer == NULL) return NULL;
+
+  FileReader* this = malloc(sizeof(FileReader));
   this->lines = calloc(1, sizeof(char*));
   char* stringBuffer = calloc(1, sizeof(char));
   int charBuffer;
@@ -68,4 +70,3 @@ void FileReader_runTest() {
 void FileReader_print(FileReader* this) {
   for (int x = 0; x < this->length; x++) printf("%s\n", this->lines[x]);
 }
-
