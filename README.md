@@ -1,5 +1,11 @@
 # L-System for Computer Graphics
 
+## Author
+
+* Name: Vicky Mohammad
+* Email: mohammav@uoguelph.com
+* ID: 0895381
+
 ## About
 
 An L-system or Lindenmayer system is a parallel rewriting system 
