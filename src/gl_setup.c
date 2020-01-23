@@ -185,10 +185,6 @@ void specialControl(int key, int x, int y) {
   const double CAMERA_MOVEMENT = 25;
   if (key == 'q' || key == 27) {
     exit(0);
-  } else if (key == 'i') {
-    GLSetup_cameraPos.z += CAMERA_MOVEMENT;
-    render();
-    printf("i key is pressed, z=%f.\n", GLSetup_cameraPos.z);
   } else if (key == 'w' || key == GLUT_KEY_UP) {
     GLSetup_cameraPos.y += CAMERA_MOVEMENT;
     render();
