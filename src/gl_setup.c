@@ -24,12 +24,10 @@ Point GLSetup_cameraPos = {.x = 0, .y = 0, .z = 0};
 /* -------------------------------------------------------------------------- */
 
 void runOpenGL(int argc, char** argv) {
-  if (argc == 0) {
-    printf("NO ARGUMENT FOUND! PLEASE SPECIFY ARGUMENT.\n");
-    return;
-  }
-  if (argv[1] == NULL) {
-    printf("NO ARGUMENT FOUND! PLEASE SPECIFY ARGUMENT.\n");
+  if (argc == 0 || argv[1] == NULL) {
+    printf(
+        "NO ARGUMENT FOUND! PLEASE SPECIFY ARGUMENT. Please read the README "
+        "provided for more information.\n");
     return;
   }
   printf("Running with file: %s\n", argv[1]);
@@ -153,7 +151,7 @@ void checkForTextureCondition(void (*draw)(void)) {
 
 void setStartingPos() {
   glTranslatef(0 + GLSetup_cameraPos.x, 0 + GLSetup_cameraPos.y,
-               -7.0 + GLSetup_cameraPos.z);
+               -100.0 + GLSetup_cameraPos.z);
   glRotatef(20.0, 1.0, 0.0, 0.0);
 }
 
@@ -252,7 +250,7 @@ void keyboardControl(unsigned char key, int x, int y) {
 void mouseControl(int x, int y) {
   const bool SHOW_DEBUG = false;
   const char DEBUG[] = "GLSetup_mouseControl():";
-  GLSetup_cameraPos.z = (y * 10) - (1000 * 10);
+  GLSetup_cameraPos.z = (y * 10) - (1000 * 5);
   if (SHOW_DEBUG) printf("%s x value is %d.\n", DEBUG, x);
   if (SHOW_DEBUG) printf("%s y value is %d.\n", DEBUG, y);
   if (SHOW_DEBUG) printf("GLSetup_cameraPos.z: %f.\n", GLSetup_cameraPos.z);
