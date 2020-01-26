@@ -18,7 +18,7 @@ strings into geometric structures.
 
 ## How to run
 
-* For example, by typing `make FILE="./assets/simple1.txt"`.
+* For example, by typing `make FILE="./assets/sample1.txt"`.
 It will run the the program with the "txt" that contains the string
 of the l-systems.
 * `FILE` must contain an argument. If not argument is pass

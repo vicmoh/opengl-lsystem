@@ -24,3 +24,4 @@ void FileReader_runTest();
 void FileReader_print(FileReader* this);
 
 #endif
+
