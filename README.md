@@ -4,7 +4,6 @@
 
 * Name: Vicky Mohammad
 * Email: mohammav@uoguelph.com
-* ID: 0895381
 
 ## About
 
