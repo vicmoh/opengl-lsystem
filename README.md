@@ -3,7 +3,7 @@
 ## Author
 
 * Name: Vicky Mohammad
-* Email: mohammav@uoguelph.com
+* Email: mohammav@uoguelph.ca
 
 ## About
 
