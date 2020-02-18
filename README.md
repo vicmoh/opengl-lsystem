@@ -20,7 +20,7 @@ strings into geometric structures.
 * For example, by typing `make FILE="./assets/sample1.txt"`.
 It will run the the program with the "txt" that contains the string
 of the l-systems.
-* `FILE` must contain an argument. If not argument is pass
+* `FILE` must contain an argument. If no argument is passed
 for the l-system string, it will segfault and does not compile.
 
 ## Control
