@@ -1,6 +1,7 @@
 
 /* Derived from scene.c in the The OpenGL Programming Guide */
 #include "gl_setup.h"
+
 #include "stdbool.h"
 
 /* flags used to control the appearance of the image */
@@ -175,11 +176,9 @@ void render(void) {
   glFlush();
 }
 
-/* --------------------------------------------------------------------------
- */
-/*                             Function controller */
-/* --------------------------------------------------------------------------
- */
+/* --------------------------------------------------------------------------*/
+/*                             Function controller                            */
+/* --------------------------------------------------------------------------*/
 
 void specialControl(int key, int x, int y) {
   const double CAMERA_MOVEMENT = 25;
